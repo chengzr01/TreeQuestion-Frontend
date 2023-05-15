@@ -9,7 +9,6 @@ import Divider from "@mui/material/Divider";
 
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ChecklistRtlIcon from "@mui/icons-material/ChecklistRtl";
 
 export default function EdgeRow({ from, label, to, statement }) {
   const [editingState, setEditingState] = useState(false);
@@ -23,7 +22,6 @@ export default function EdgeRow({ from, label, to, statement }) {
       <TableCell align="center">{from}</TableCell>
       <TableCell align="center">{label}</TableCell>
       <TableCell align="center">{to}</TableCell>
-      <TableCell align="left">{statement}</TableCell>
       <TableCell align="center">
         <Box
           sx={{
@@ -42,8 +40,6 @@ export default function EdgeRow({ from, label, to, statement }) {
             },
           }}
         >
-          <ChecklistRtlIcon />
-          <Divider orientation="vertical" variant="middle" flexItem />
           <EditIcon
             onClick={(event) => {
               handleStatementEdit(event);

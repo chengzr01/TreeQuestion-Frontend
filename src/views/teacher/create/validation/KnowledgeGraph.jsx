@@ -1,28 +1,27 @@
 import * as React from "react";
 import { useCallback, useState, useEffect } from "react";
 
-// Material UI
-import { Box } from "@mui/material";
-import { Card } from "@mui/material";
-import ClickableNode from "../../../student/answer/tree/diagram/ClickableNode";
-import EditableText from "./EditableText";
+import EditableNode from "./EditableNode";
 import ReactFlow, {
-  useNodesState,
-  useEdgesState,
   applyEdgeChanges,
   applyNodeChanges,
   addEdge,
   MiniMap,
   Controls,
   Background,
+  MarkerType,
 } from "reactflow";
 import dagre from "dagre";
+
+import "./editable-node.css";
+
+import CustomEdge from "./CustomEdge";
 
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
 
-const nodeWidth = 300;
-const nodeHeight = 50;
+const nodeWidth = 400;
+const nodeHeight = 200;
 
 const getLayoutedElements = (nodes, edges, direction = "TB") => {
   const isHorizontal = direction === "LR";
@@ -54,13 +53,16 @@ const getLayoutedElements = (nodes, edges, direction = "TB") => {
   return { nodes, edges };
 };
 
-const nodeTypes = { clickable: ClickableNode };
+const nodeTypes = { editable: EditableNode };
+const edgeTypes = {
+  editable: CustomEdge,
+};
 
 export default function KnowledgeGraph({ graphState }) {
   var newNodes = graphState.nodes.map((node) => {
     return {
       id: graphState.nodes.indexOf(node).toString(),
-      type: "clickable",
+      type: "editable",
       draggable: true,
       connectable: true,
       position: { x: 0, y: 0 },
@@ -84,6 +86,13 @@ export default function KnowledgeGraph({ graphState }) {
       source: `${sourceIndex}`,
       target: `${targetIndex}`,
       label: `${edge.label}`,
+      data: {
+        label: `${edge.label}`,
+      },
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+      },
+      type: "editable",
     };
   });
 
@@ -119,17 +128,19 @@ export default function KnowledgeGraph({ graphState }) {
   };
 
   return (
-    <div style={{ width: "100%", height: "100%" }}>
+    <div style={{ width: "100%", height: "80%" }}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         fitView
       >
         <Controls />
+        <MiniMap />
         <Background variant="dots" gap={12} size={1} />
       </ReactFlow>
     </div>

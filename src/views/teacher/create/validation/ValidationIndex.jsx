@@ -17,7 +17,7 @@ import axios from "axios";
 export default function ValidationIndex({ value, setValue }) {
   const TYPE = { DIAGRAM: 0, LIST: 1 };
   const [changeVisible, setChangeVisible] = useState(false);
-  const [treeViewType, setTreeViewType] = useState(TYPE.DIAGRAM);
+  const [treeViewType, setTreeViewType] = useState(TYPE.LIST);
   const getChangeNote = () => {
     if (changeVisible) {
       return (

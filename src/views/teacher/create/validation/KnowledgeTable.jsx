@@ -35,19 +35,16 @@ export default function KnowledgeTable({ graphState }) {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ width: "15%" }} align="center">
+              <TableCell sx={{ width: "25%" }} align="center">
                 From
               </TableCell>
-              <TableCell sx={{ width: "10%" }} align="center">
+              <TableCell sx={{ width: "25%" }} align="center">
                 Label
               </TableCell>
-              <TableCell sx={{ width: "15%" }} align="center">
+              <TableCell sx={{ width: "25%" }} align="center">
                 To
               </TableCell>
-              <TableCell sx={{ width: "40%" }} align="center">
-                Statement
-              </TableCell>
-              <TableCell sx={{ width: "20%" }} align="center">
+              <TableCell sx={{ width: "25%" }} align="center">
                 Operation
               </TableCell>
             </TableRow>
@@ -61,7 +58,6 @@ export default function KnowledgeTable({ graphState }) {
                     from={edge.from}
                     label={edge.label}
                     to={edge.to}
-                    statement={edge.statement}
                   ></EdgeRow>
                 );
               })}
