@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useState } from "react";
-import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import { Typography } from "@mui/material";
 import palette from "../../../../theme/palette";
@@ -14,8 +13,9 @@ export default function OptionCard({ option, choice, setChoice }) {
   return (
     <Card
       sx={{
-        m: 1,
         p: 1,
+        mt: 1,
+        mb: 1,
         "&:hover": {
           backgroundColor: "grey.200",
           opacity: [0.75, 0.75, 0.75],

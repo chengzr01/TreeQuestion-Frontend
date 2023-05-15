@@ -15,6 +15,7 @@ export default function TreeQuestionRouter() {
   return (
     <Router>
       <Routes>
+        <Route exact path="/" element={<SignInPage />} />
         <Route exact path="/signin" element={<SignInPage />} />
         <Route exact path="/signup" element={<SignUpPage />} />
         <Route exact path="/teacher" element={<TeacherIndex />}>

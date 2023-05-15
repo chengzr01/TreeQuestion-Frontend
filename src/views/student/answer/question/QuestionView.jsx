@@ -10,7 +10,13 @@ import OptionCard from "./OptionCard";
 import SubmitDialog from "./SubmitDialog";
 import SkipDialog from "./SkipDialog";
 
-export default function QuestionView({ id, stem, options }) {
+export default function QuestionView({
+  id,
+  stem,
+  options,
+  handleSubmit,
+  handleSkip,
+}) {
   const [submitDialogOpen, setSubmitDialogOpen] = useState(false);
   const [skipDialogOpen, setSkipDialogOpen] = useState(false);
   const [choice, setChoice] = useState(
@@ -19,12 +25,12 @@ export default function QuestionView({ id, stem, options }) {
     })
   );
 
-  const handleSubmit = (event) => {
+  const handleClickSubmit = (event) => {
     event.preventDefault();
     setSubmitDialogOpen(true);
   };
 
-  const handleSkip = (event) => {
+  const handleClickSkip = (event) => {
     event.preventDefault();
     setSkipDialogOpen(true);
   };
@@ -61,7 +67,7 @@ export default function QuestionView({ id, stem, options }) {
               size="small"
               variant="outlined"
               onClick={(event) => {
-                handleSubmit(event);
+                handleClickSubmit(event);
               }}
             >
               Submit
@@ -78,7 +84,7 @@ export default function QuestionView({ id, stem, options }) {
               size="small"
               variant="outlined"
               onClick={(event) => {
-                handleSkip(event);
+                handleClickSkip(event);
               }}
             >
               Skip
@@ -86,8 +92,16 @@ export default function QuestionView({ id, stem, options }) {
           </Grid>
         </Grid>
       </CardActions>
-      <SubmitDialog open={submitDialogOpen} setOpen={setSubmitDialogOpen} />
-      <SkipDialog open={skipDialogOpen} setOpen={setSkipDialogOpen} />
+      <SubmitDialog
+        open={submitDialogOpen}
+        setOpen={setSubmitDialogOpen}
+        handleSubmit={handleSubmit}
+      />
+      <SkipDialog
+        open={skipDialogOpen}
+        setOpen={setSkipDialogOpen}
+        handleSkip={handleSkip}
+      />
     </Paper>
   );
 }

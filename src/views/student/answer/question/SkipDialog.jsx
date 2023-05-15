@@ -19,7 +19,7 @@ function PaperComponent(props) {
   );
 }
 
-export default function SkipDialog({ open, setOpen }) {
+export default function SkipDialog({ open, setOpen, handleSkip }) {
   const handleClose = () => {
     setOpen(false);
   };
@@ -39,10 +39,23 @@ export default function SkipDialog({ open, setOpen }) {
           <DialogContentText></DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose}>
+          <Button
+            autoFocus
+            onClick={() => {
+              handleClose();
+              setOpen(false);
+            }}
+          >
             Cancel
           </Button>
-          <Button onClick={handleClose}>Confirm</Button>
+          <Button
+            onClick={() => {
+              handleSkip();
+              setOpen(false);
+            }}
+          >
+            Confirm
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

@@ -8,6 +8,76 @@ import Collapse from "@mui/material/Collapse";
 import Paper from "@mui/material/Paper";
 import { useSpring, animated } from "@react-spring/web";
 
+const STATE = { INACTIVE: 0, ACTIVE: 1, CORRECT: 2, WRONG: 3 };
+
+const initialNodes = [
+  {
+    id: "1",
+    type: "clickable",
+    position: { x: 0, y: 0 },
+    data: { label: "Question ID.1", state: STATE.CORRECT },
+  },
+  {
+    id: "2",
+    type: "clickable",
+    position: { x: 0, y: 100 },
+    data: { label: "Question ID.2", state: STATE.CORRECT },
+  },
+  {
+    id: "3",
+    type: "clickable",
+    position: { x: -200, y: 200 },
+    data: { label: "Question ID.3", state: STATE.ACTIVE },
+  },
+  {
+    id: "4",
+    type: "clickable",
+    position: { x: 0, y: 200 },
+    data: { label: "Question ID.4", state: STATE.WRONG },
+  },
+  {
+    id: "5",
+    type: "clickable",
+    position: { x: 200, y: 200 },
+    data: { label: "Question ID.5", state: STATE.INACTIVE },
+  },
+  {
+    id: "6",
+    type: "clickable",
+    position: { x: 200, y: 200 },
+    data: { label: "Question ID. 6", state: STATE.INACTIVE },
+  },
+  {
+    id: "7",
+    type: "clickable",
+    position: { x: 200, y: 200 },
+    data: { label: "Question ID. 7", state: STATE.INACTIVE },
+  },
+  {
+    id: "8",
+    type: "clickable",
+    position: { x: 200, y: 200 },
+    data: { label: "Question ID. 8", state: STATE.INACTIVE },
+  },
+  {
+    id: "9",
+    type: "clickable",
+    position: { x: 200, y: 200 },
+    data: { label: "Question ID. 9", state: STATE.INACTIVE },
+  },
+];
+
+const initialEdges = [
+  { id: "e1-2", source: "1", target: "2" },
+  { id: "e2-3", source: "2", target: "3" },
+  { id: "e2-4", source: "2", target: "4" },
+  { id: "e1-5", source: "1", target: "5" },
+  { id: "e5-9", source: "5", target: "9" },
+  { id: "e4-6", source: "4", target: "6" },
+  { id: "e6-7", source: "6", target: "7" },
+  { id: "e6-7", source: "6", target: "8" },
+];
+
 function MinusSquare(props) {
   return (
     <SvgIcon fontSize="inherit" style={{ width: 14, height: 14 }} {...props}>
@@ -74,9 +144,9 @@ const StyledTreeItem = styled((props) => (
   },
 }));
 
-export default function FullTreeView() {
+export default function ListTreeView() {
   return (
-    <Paper sx={{ width: "100%", p: 2, height: "60vh" }}>
+    <Paper sx={{ p: 2, width: "100%", height: "80%" }}>
       <TreeView
         defaultExpanded={["1"]}
         defaultCollapseIcon={<MinusSquare />}
@@ -85,17 +155,10 @@ export default function FullTreeView() {
         sx={{ height: 264, flexGrow: 1, maxWidth: 400, overflowY: "auto" }}
       >
         <StyledTreeItem nodeId="1" label="Main">
-          <StyledTreeItem nodeId="2" label="Hello" />
-          <StyledTreeItem nodeId="3" label="Subtree with children">
-            <StyledTreeItem nodeId="6" label="Hello" />
-            <StyledTreeItem nodeId="7" label="Sub-subtree with children">
-              <StyledTreeItem nodeId="9" label="Child 1" />
-              <StyledTreeItem nodeId="10" label="Child 2" />
-              <StyledTreeItem nodeId="11" label="Child 3" />
-            </StyledTreeItem>
-            <StyledTreeItem nodeId="8" label="Hello" />
+          <StyledTreeItem nodeId="2" label="Question 1" />
+          <StyledTreeItem nodeId="4" label="Hello">
+            <StyledTreeItem nodeId="3" label="Hello" />
           </StyledTreeItem>
-          <StyledTreeItem nodeId="4" label="World" />
           <StyledTreeItem nodeId="5" label="Something something" />
         </StyledTreeItem>
       </TreeView>

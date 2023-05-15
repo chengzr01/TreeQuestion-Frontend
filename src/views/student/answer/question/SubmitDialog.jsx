@@ -19,7 +19,7 @@ function PaperComponent(props) {
   );
 }
 
-export default function SubmitDialog({ open, setOpen }) {
+export default function SubmitDialog({ open, setOpen, handleSubmit }) {
   const handleClose = () => {
     setOpen(false);
   };
@@ -39,10 +39,24 @@ export default function SubmitDialog({ open, setOpen }) {
           <DialogContentText></DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose}>
+          <Button
+            autoFocus
+            onClick={() => {
+              handleClose();
+              setOpen(false);
+            }}
+          >
             Cancel
           </Button>
-          <Button onClick={handleClose}>Confirm</Button>
+          <Button
+            onClick={() => {
+              handleSubmit();
+              setOpen(false);
+            }}
+          >
+            {" "}
+            Confirm{" "}
+          </Button>
         </DialogActions>
       </Dialog>
     </div>
