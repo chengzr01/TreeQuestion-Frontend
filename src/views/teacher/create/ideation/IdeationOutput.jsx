@@ -17,21 +17,21 @@ export default function IdeationOutput({ update, setUpdate, value, setValue }) {
   const getIdeationList = () => {
     setLoad(true);
     setUpdate(true);
-    axios.get("knowledge/read_ideation_all/").then((res) => {
+    axios.get("/knowledge/read_ideation_all/").then((res) => {
       setIdeationList(res.data.data);
     });
   };
 
   const getKnowledgeList = () => {
     setKnowledgeLoad(true);
-    axios.get("knowledge/read_knowledge_all/").then((res) => {
+    axios.get("/knowledge/read_knowledge_all/").then((res) => {
       setKnowledgeList(res.data.data);
     });
   };
 
   const handleConfirm = (event) => {
     event.preventDefault();
-    axios.post("knowledge/create_knowledge_all/").then((res) => {
+    axios.post("/knowledge/create_knowledge_all/").then((res) => {
       console.log(res);
       getKnowledgeList();
     });

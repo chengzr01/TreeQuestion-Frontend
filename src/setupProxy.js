@@ -1,12 +1,11 @@
+const { createProxyMiddleware } = require("http-proxy-middleware");
 
-const { createProxyMiddleware } = require('http-proxy-middleware')
- 
 module.exports = function (app) {
-    app.use(
-        createProxyMiddleware('/knowledge', { 
-            target: 'http://127.0.0.1:8000',
-            changeOrigin: true,
-            pathRewrite: { '^/knowledge': '/knowledge' }
-        })
-    )
-}
+  app.use(
+    createProxyMiddleware("/knowledge", {
+      target: "http://127.0.0.1:8000",
+      changeOrigin: true,
+      pathRewrite: { "^/knowledge": "/knowledge" },
+    })
+  );
+};

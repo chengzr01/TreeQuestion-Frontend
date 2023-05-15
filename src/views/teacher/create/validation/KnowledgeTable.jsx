@@ -30,8 +30,7 @@ export default function KnowledgeTable({ graphState }) {
   };
 
   return (
-    <Card sx={{ m: 4, p: 4 }}>
-      <h1>Knowledge Table</h1>
+    <Card sx={{ m: 2, width: "100%", height: "100%" }}>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>

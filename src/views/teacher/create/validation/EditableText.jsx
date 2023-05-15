@@ -9,11 +9,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import { Typography } from "@mui/material";
 
-const ariaLabel = { "aria-label": "description" };
-
 export default function EditableText({ defaultValue, updateDefaultValue }) {
   const [editState, setEditState] = useState(false);
   const [displayString, setDisplayString] = useState(defaultValue);
+  const [changeVisible, setChangeVisible] = useState(false);
 
   const handleEditIconClick = (event) => {
     event.preventDefault();
@@ -29,6 +28,14 @@ export default function EditableText({ defaultValue, updateDefaultValue }) {
   const handleInputValueChange = (event) => {
     event.preventDefault();
     setDisplayString(event.target.value);
+  };
+
+  const getShowIcon = () => {
+    if (changeVisible) {
+      return getEditIcon();
+    } else {
+      return null;
+    }
   };
 
   const getEditIcon = () => {
@@ -56,7 +63,6 @@ export default function EditableText({ defaultValue, updateDefaultValue }) {
       return (
         <Input
           value={displayString}
-          inputProps={ariaLabel}
           onChange={(event) => {
             handleInputValueChange(event);
           }}
@@ -69,19 +75,44 @@ export default function EditableText({ defaultValue, updateDefaultValue }) {
   };
   return (
     <Box
-      component="form"
-      sx={{
-        "& > :not(style)": { m: 1 },
+      onMouseEnter={(event) => {
+        event.preventDefault();
+        setChangeVisible(true);
       }}
-      noValidate
-      autoComplete="off"
+      onMouseLeave={(event) => {
+        event.preventDefault();
+        setChangeVisible(false);
+      }}
     >
-      <Grid container spacing={2}>
-        <Grid item xs={10}>
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          p: 1,
+          pb: 2,
+          "&:hover": {
+            backgroundColor: "grey.200",
+            opacity: [0.75, 0.75, 0.75],
+          },
+        }}
+      >
+        <Grid
+          item
+          xs={10}
+          display="flex"
+          justifyContent="left"
+          alignItems="left"
+        >
           {getDisplayString()}
         </Grid>
-        <Grid item xs={2}>
-          {getEditIcon()}
+        <Grid
+          item
+          xs={2}
+          display="flex"
+          justifyContent="right"
+          alignItems="right"
+        >
+          {getShowIcon()}
         </Grid>
       </Grid>
     </Box>

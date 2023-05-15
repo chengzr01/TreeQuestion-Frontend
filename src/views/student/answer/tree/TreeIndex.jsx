@@ -77,12 +77,12 @@ export default function TreeIndex({
           >
             {getChangeNote()}
             <AdjustIcon
-              onMouseOver={(event) => {
+              onMouseEnter={(event) => {
                 event.preventDefault();
                 setChangeVisible(true);
                 event.target.style.color = palette.grey[500];
               }}
-              onMouseOut={(event) => {
+              onMouseLeave={(event) => {
                 event.preventDefault();
                 setChangeVisible(false);
                 event.target.style.color = palette.grey[500];
