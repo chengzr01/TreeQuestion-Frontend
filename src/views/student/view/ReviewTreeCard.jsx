@@ -26,8 +26,9 @@ export default function ReviewTreeCard({ id, teacher, grade }) {
           Grade: {grade}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          Teacher: {teacher}
+          Time: 25 minutes <br></br>
         </Typography>
+
         <ReviewTable />
       </CardContent>
     </Card>

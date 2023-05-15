@@ -17,7 +17,7 @@ export default function ClickableNode({ data, isConnectable }) {
     } else if (data.state === STATE.ACTIVE) {
       return `${alpha(palette.info.main, 0.6)}`;
     } else if (data.state === STATE.CORRECT) {
-      return `${alpha(palette.success.main, 0.6)}`;
+      return `${alpha(palette.primary.main, 0.6)}`;
     } else if (data.state === STATE.WRONG) {
       return `${alpha(palette.error.main, 0.6)}`;
     }

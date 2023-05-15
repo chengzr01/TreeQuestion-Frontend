@@ -30,7 +30,7 @@ export default function StatementTable() {
   };
 
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -54,7 +54,6 @@ export default function StatementTable() {
   return (
     <Card sx={{ m: 4, p: 4 }}>
       <ModifyDialog open={open} handleClose={handleClose} />
-      <Typography variant="h4"> Statements </Typography>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
