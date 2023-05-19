@@ -1,6 +1,6 @@
-import * as React from "react";
+import React from "react";
 import { useState } from "react";
-
+import { BaseEdge, getBezierPath, EdgeLabelRenderer } from "reactflow";
 import { alpha } from "@mui/material/styles";
 import {
   Button,
@@ -14,60 +14,68 @@ import {
   DialogContent,
 } from "@mui/material";
 
-import { Handle, Position } from "reactflow";
-
 import palette from "../../../../theme/palette";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function EditableNode({ id, data, method, isConnectable }) {
-  const [anchorEl, setAnchorEl] = useState(null);
+export default function EditableEdge({
+  id,
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  sourcePosition,
+  targetPosition,
+  style = {},
+  markerEnd,
+  data = { label: "Edge" },
+}) {
+  const [edgePath, labelX, labelY] = getBezierPath({
+    sourceX,
+    sourceY,
+    sourcePosition,
+    targetX,
+    targetY,
+    targetPosition,
+  });
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const [modifyOpen, setModifyOpen] = useState(false);
-  const [nodeName, setNodeName] = useState(data.label);
+  const [edgeName, setEdgeName] = useState(data.label);
 
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
   const handleClose = () => {
     setAnchorEl(null);
   };
 
   return (
-    <div
-      className="editable-node"
-      style={{
-        minWidth: "10vw",
-        minHeight: "5vh",
-        borderWidth: "0.5",
-        borderColor: "black",
-        backgroundColor: `${alpha(palette.grey[300], 0.6)}`,
-      }}
-    >
+    <>
+      <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} />
       <Dialog open={modifyOpen} TransitionComponent={Transition} keepMounted>
-        <DialogTitle>{"Modify Node"}</DialogTitle>
+        <DialogTitle>{"Modify Edge"}</DialogTitle>
         <DialogContent>
           <input
-            value={nodeName}
-            onChange={(evt) => setNodeName(evt.target.value)}
+            value={edgeName}
+            onChange={(evt) => setEdgeName(evt.target.value)}
           />
         </DialogContent>
         <DialogActions>
           <Button
             onClick={() => {
               setModifyOpen(false);
-              data.update(id, nodeName);
+              data.update(id, edgeName);
             }}
           >
             Confirm
           </Button>
         </DialogActions>
       </Dialog>
-
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
@@ -86,28 +94,24 @@ export default function EditableNode({ id, data, method, isConnectable }) {
           Modify
         </MenuItem>
       </Menu>
-      <Handle
-        type="target"
-        position={Position.Right}
-        isConnectable={isConnectable}
-      />
-      <div>
-        <Typography
-          id="basic-button"
-          sx={{ p: 1 }}
-          aria-controls={open ? "basic-menu" : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? "true" : undefined}
+      <EdgeLabelRenderer>
+        <div
+          style={{
+            position: "absolute",
+            transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
+            background: `${alpha(palette.primary.main, 0.6)}`,
+            padding: 10,
+            borderRadius: 5,
+            fontSize: 12,
+            fontWeight: 700,
+            pointerEvents: "all",
+          }}
           onClick={handleClick}
+          className="nodrag nopan"
         >
-          {nodeName}
-        </Typography>
-      </div>
-      <Handle
-        type="source"
-        position={Position.Left}
-        isConnectable={isConnectable}
-      />
-    </div>
+          <Typography>{edgeName}</Typography>
+        </div>
+      </EdgeLabelRenderer>
+    </>
   );
 }

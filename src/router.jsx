@@ -7,7 +7,6 @@ import StudentIndex from "./views/student/StudentIndex";
 import SignInPage from "./views/SignInPage";
 import SignUpPage from "./views/SignUpPage";
 import CreateIndex from "./views/teacher/create/CreateIndex";
-import ViewIndex from "./views/teacher/view/ViewIndex";
 import AnswerIndex from "./views/student/answer/AnswerIndex";
 import ReviewIndex from "./views/student/view/ReviewIndex";
 
@@ -20,7 +19,6 @@ export default function TreeQuestionRouter() {
         <Route exact path="/signup" element={<SignUpPage />} />
         <Route exact path="/teacher" element={<TeacherIndex />}>
           <Route exact path="create" element={<CreateIndex />}></Route>
-          <Route exact path="view" element={<ViewIndex />}></Route>
         </Route>
         <Route exact path="/student" element={<StudentIndex />}>
           <Route exact path="answer" element={<AnswerIndex />}></Route>

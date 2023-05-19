@@ -1,16 +1,7 @@
 import * as React from "react";
-
-// MaterialUI
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-
-// Components
-
+import { useNavigate, Outlet } from "react-router-dom";
+import { Box, Typography, Button, Grid } from "@mui/material";
 import TreeBar from "../../components/TreeBar";
-import { Outlet } from "react-router-dom";
-import { Button, Grid } from "@mui/material";
-
-import { useNavigate } from "react-router-dom";
 
 export default function TeacherIndex({ children }) {
   let navigate = useNavigate();
@@ -24,36 +15,19 @@ export default function TeacherIndex({ children }) {
         <Grid container spacing={2} sx={{ mt: 2, mb: 2 }}>
           <Grid
             item
-            xs={6}
+            xs={12}
             display="flex"
-            justifyContent="right"
-            alignItems="right"
+            justifyContent="center"
+            alignItems="center"
           >
             <Button
               variant="outlined"
-              sx={{ width: "40%" }}
+              sx={{ width: "20%" }}
               onClick={() => {
                 navigate("create");
               }}
             >
               <Typography variant="h6">🪴 Create New Trees </Typography>
-            </Button>
-          </Grid>
-          <Grid
-            item
-            xs={6}
-            display="flex"
-            justifyContent="left"
-            alignItems="left"
-          >
-            <Button
-              variant="outlined"
-              sx={{ width: "40%" }}
-              onClick={() => {
-                navigate("view");
-              }}
-            >
-              <Typography variant="h6"> 🌳 View Historical Trees</Typography>
             </Button>
           </Grid>
         </Grid>

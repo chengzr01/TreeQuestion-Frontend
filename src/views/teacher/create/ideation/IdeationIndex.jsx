@@ -1,9 +1,9 @@
 import * as React from "react";
 import { useState } from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 
-import IdeationInput from "./IdeationInput";
-import IdeationOutput from "./IdeationOutput";
+import IdeationInput from "./input/IdeationInput";
+import IdeationOutput from "./output/IdeationOutput";
 
 export default function IdeationIndex({ value, setValue }) {
   const [update, setUpdate] = useState(false);
@@ -11,12 +11,7 @@ export default function IdeationIndex({ value, setValue }) {
   return (
     <Box>
       <IdeationInput update={update} setUpdate={setUpdate} />
-      <IdeationOutput
-        update={update}
-        setUpdate={setUpdate}
-        value={value}
-        setValue={setValue}
-      />
+      <IdeationOutput setValue={setValue} />
     </Box>
   );
 }
