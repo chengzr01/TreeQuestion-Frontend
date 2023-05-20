@@ -55,7 +55,7 @@ const getLayoutedElements = (nodes, edges, direction = "RL") => {
 const nodeTypes = { editable: EditableNode };
 const edgeTypes = { editable: EditableEdge };
 
-function AddNodeOnEdgeDrop() {
+function AddNodeOnEdgeDrop({ graph, setGraph }) {
   const { project } = useReactFlow();
   const reactFlowWrapper = useRef(null);
   const connectingNodeId = useRef(null);
@@ -156,7 +156,9 @@ function AddNodeOnEdgeDrop() {
   const onSave = useCallback(() => {
     console.log(nodes);
     console.log(edges);
-  }, [nodes, edges]);
+    var newGraph = { nodes: nodes, edges: edges };
+    setGraph(newGraph);
+  }, [nodes, edges, setGraph]);
 
   const onLayout = useCallback(
     (direction) => {
@@ -314,10 +316,10 @@ function AddNodeOnEdgeDrop() {
   );
 }
 
-export default function KnowledgeGraph() {
+export default function KnowledgeGraph({ graph, setGraph }) {
   return (
     <ReactFlowProvider>
-      <AddNodeOnEdgeDrop />
+      <AddNodeOnEdgeDrop graph={graph} setGraph={setGraph} />
     </ReactFlowProvider>
   );
 }

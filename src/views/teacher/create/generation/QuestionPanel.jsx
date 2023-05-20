@@ -3,9 +3,8 @@ import { useState } from "react";
 
 import { Card, Box, Grid, Button } from "@mui/material";
 import { Typography } from "@mui/material";
-import StateTable from "./StateTable";
 import EditableText from "../validation/EditableText";
-export default function QuestionPanel({}) {
+export default function QuestionPanel() {
   const [ID, setID] = useState(10);
   const [stem, setStem] = useState(
     "What is a potential vulnerability associated with symmetric encryption?"
@@ -16,31 +15,6 @@ export default function QuestionPanel({}) {
   const [answer, setAnswer] = useState("C");
   return (
     <Card sx={{ m: 4, p: 4 }}>
-      <Typography variant="h5"> 🗒 Statistics</Typography>
-      <Box sx={{ pt: 2, pb: 2 }}>
-        <StateTable />
-      </Box>
-      <Typography variant="h5"> 💡 Suggestions</Typography>
-      <Box sx={{ pt: 2, pb: 2 }}>
-        <Card
-          sx={{
-            m: 1,
-            p: 1,
-          }}
-        >
-          <Typography variant="body">Hashing, Understand Level</Typography>
-        </Card>
-        <Card
-          sx={{
-            m: 1,
-            p: 1,
-          }}
-        >
-          <Typography variant="body">
-            Symmectric Encryption, Evaluate Level
-          </Typography>
-        </Card>
-      </Box>
       <Typography variant="h5"> 🔍 Questions</Typography>
       <Box sx={{ pt: 2, pb: 2 }}>
         <Grid container spacing={2}>

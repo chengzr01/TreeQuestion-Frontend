@@ -1,10 +1,7 @@
 import * as React from "react";
 
 // MaterialUI
-import Box from "@mui/material/Box";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
+import { Box, Tabs, Tab, Typography } from "@mui/material";
 
 // Components
 import IdeationIndex from "./ideation/IdeationIndex";
@@ -40,6 +37,7 @@ function a11yProps(index) {
 
 export default function CreateIndex() {
   const [value, setValue] = React.useState(0);
+  const [graph, setGraph] = React.useState({ nodes: [], edges: [] });
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -58,10 +56,20 @@ export default function CreateIndex() {
         <IdeationIndex value={value} setValue={setValue} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <ValidationIndex value={value} setValue={setValue} />
+        <ValidationIndex
+          value={value}
+          setValue={setValue}
+          graph={graph}
+          setGraph={setGraph}
+        />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <GenerationIndex value={value} setValue={setValue} />
+        <GenerationIndex
+          value={value}
+          setValue={setValue}
+          graph={graph}
+          setGraph={setGraph}
+        />
       </TabPanel>
     </Box>
   );

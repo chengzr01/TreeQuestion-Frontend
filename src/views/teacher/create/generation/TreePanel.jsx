@@ -1,19 +1,15 @@
 import * as React from "react";
-import { useCallback, useState, useEffect } from "react";
-import { Paper, Box } from "@mui/material";
+import { useCallback, useState } from "react";
+import { Card } from "@mui/material";
 
 import ReactFlow, {
   applyEdgeChanges,
   applyNodeChanges,
   addEdge,
-  MiniMap,
   Controls,
   Background,
-  MarkerType,
 } from "reactflow";
 import dagre from "dagre";
-
-import EditableNode from "../validation/EditableNode";
 
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -49,8 +45,6 @@ const getLayoutedElements = (nodes, edges, direction = "TB") => {
 
   return { nodes, edges };
 };
-
-const nodeTypes = { editable: EditableNode };
 
 const newNodes = [
   {
@@ -166,12 +160,11 @@ export default function TreePanel() {
   );
 
   return (
-    <Paper sx={{ m: 4, p: 4, width: "95%", height: "80vh" }}>
-      <div style={{ p: 2, width: "100%", height: "100%" }}>
+    <Card sx={{ width: "100%", height: "80vh", m: 4, p: 4 }}>
+      <div style={{ p: 1, width: "100%", height: "100%" }}>
         <ReactFlow
           nodes={nodes}
           edges={edges}
-          nodeTypes={nodeTypes}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
@@ -181,6 +174,6 @@ export default function TreePanel() {
           <Background variant="dots" gap={12} size={1} />
         </ReactFlow>
       </div>
-    </Paper>
+    </Card>
   );
 }
