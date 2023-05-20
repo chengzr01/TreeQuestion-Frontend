@@ -78,6 +78,7 @@ export default function EditableNode({ id, data, method, isConnectable }) {
         }}
       >
         <MenuItem
+          sx={{ minWidth: "10vw" }}
           onClick={() => {
             handleClose();
             setModifyOpen(true);
@@ -86,11 +87,13 @@ export default function EditableNode({ id, data, method, isConnectable }) {
           Modify
         </MenuItem>
       </Menu>
+
       <Handle
         type="target"
         position={Position.Right}
         isConnectable={isConnectable}
       />
+
       <div>
         <Typography
           id="basic-button"
@@ -103,6 +106,7 @@ export default function EditableNode({ id, data, method, isConnectable }) {
           {nodeName}
         </Typography>
       </div>
+
       <Handle
         type="source"
         position={Position.Left}

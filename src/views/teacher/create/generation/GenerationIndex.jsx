@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState, useEffect } from "react";
 
 import { Box } from "@mui/material";
 import { Grid } from "@mui/material";
@@ -10,6 +11,8 @@ import IssuePanel from "./issue/IssuePanel";
 import StatePanel from "./tree/StatePanel";
 
 export default function GenerationIndex({ value, setValue, graph, setGraph }) {
+  const [tree, setTree] = useState({ nodes: [], edges: [] });
+  const [update, setUpdate] = useState(true);
   return (
     <Box>
       <Grid container spacing={2}>
@@ -17,13 +20,23 @@ export default function GenerationIndex({ value, setValue, graph, setGraph }) {
           <StatementTable graph={graph} setGraph={setGraph} />
         </Grid>
         <Grid item xs={4}>
-          <QuestionPanel />
+          <QuestionPanel
+            tree={tree}
+            setTree={setTree}
+            update={update}
+            setUpdate={setUpdate}
+          />
         </Grid>
         <Grid item xs={8}>
-          <TreePanel />
+          <TreePanel
+            tree={tree}
+            setTree={setTree}
+            update={update}
+            setUpdate={setUpdate}
+          />
         </Grid>
         <Grid item xs={4}>
-          <StatePanel />
+          <StatePanel tree={tree} setTree={setTree} />
         </Grid>
         <Grid item xs={12}>
           <IssuePanel />

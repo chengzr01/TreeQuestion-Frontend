@@ -1,6 +1,8 @@
 import * as React from "react";
-import { useCallback, useState } from "react";
-import { Card } from "@mui/material";
+import { useCallback, useState, useEffect } from "react";
+import { Card, Grid } from "@mui/material";
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import SaveIcon from "@mui/icons-material/Save";
 
 import ReactFlow, {
   applyEdgeChanges,
@@ -8,8 +10,15 @@ import ReactFlow, {
   addEdge,
   Controls,
   Background,
+  Panel,
 } from "reactflow";
 import dagre from "dagre";
+
+import "./tree-node.css";
+import "reactflow/dist/style.css";
+import TreeNode from "./TreeNode";
+
+const nodeTypes = { treenode: TreeNode };
 
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -46,118 +55,54 @@ const getLayoutedElements = (nodes, edges, direction = "TB") => {
   return { nodes, edges };
 };
 
-const newNodes = [
-  {
-    id: "1",
-    type: "clickable",
-    draggable: true,
-    connectable: true,
-    position: { x: 0, y: 0 },
-    data: { label: "Question ID.1" },
-  },
-  {
-    id: "2",
-    type: "clickable",
-    draggable: true,
-    connectable: true,
-    position: { x: 0, y: 0 },
-    data: { label: "Question ID.2" },
-  },
-  {
-    id: "3",
-    type: "clickable",
-    draggable: true,
-    connectable: true,
-    position: { x: 0, y: 0 },
-    data: { label: "Question ID.3" },
-  },
-  {
-    id: "4",
-    type: "clickable",
-    draggable: true,
-    connectable: true,
-    position: { x: 0, y: 0 },
-    data: { label: "Question ID.4" },
-  },
-  {
-    id: "5",
-    type: "clickable",
-    draggable: true,
-    connectable: true,
-    position: { x: 0, y: 0 },
-    data: { label: "Question ID.5" },
-  },
-  {
-    id: "6",
-    type: "clickable",
-    draggable: true,
-    connectable: true,
-    position: { x: 0, y: 0 },
-    data: { label: "Question ID. 6" },
-  },
-  {
-    id: "7",
-    type: "clickable",
-    draggable: true,
-    connectable: true,
-    position: { x: 0, y: 0 },
-    data: { label: "Question ID. 7" },
-  },
-  {
-    id: "8",
-    type: "clickable",
-    draggable: true,
-    connectable: true,
-    position: { x: 0, y: 0 },
-    data: { label: "Question ID. 8" },
-  },
-  {
-    id: "9",
-    type: "clickable",
-    draggable: true,
-    connectable: true,
-    position: { x: 0, y: 0 },
-    data: { label: "Question ID. 9" },
-  },
-  {
-    id: "10",
-    type: "clickable",
-    draggable: true,
-    connectable: true,
-    position: { x: 0, y: 0 },
-    data: { label: "Question ID. 10" },
-  },
-];
-const newEdges = [
-  { id: "e1-2", source: "1", target: "2" },
-  { id: "e2-3", source: "2", target: "3" },
-  { id: "e2-4", source: "2", target: "4" },
-  { id: "e1-5", source: "1", target: "5" },
-  { id: "e5-9", source: "5", target: "9" },
-  { id: "e4-6", source: "4", target: "6" },
-  { id: "e6-7", source: "6", target: "7" },
-  { id: "e6-7", source: "6", target: "8" },
-];
+export default function TreePanel({ tree, setTree, update, setUpdate }) {
+  const [nodes, setNodes] = useState([]);
+  const [edges, setEdges] = useState([]);
 
-export default function TreePanel() {
-  var layoutResult = getLayoutedElements(newNodes, newEdges);
-
-  const [nodes, setNodes] = useState(layoutResult.nodes);
-  const [edges, setEdges] = useState(layoutResult.edges);
+  const onSave = useCallback(() => {
+    setTree({ nodes: nodes, edges: edges });
+  }, [nodes, edges, setTree]);
 
   const onNodesChange = useCallback(
-    (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-    [setNodes]
+    (changes) => {
+      setNodes((nds) => applyNodeChanges(changes, nds));
+      onSave();
+    },
+    [setNodes, onSave]
   );
+
   const onEdgesChange = useCallback(
-    (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-    [setEdges]
+    (changes) => {
+      setEdges((eds) => applyEdgeChanges(changes, eds));
+      onSave();
+    },
+    [setEdges, onSave]
   );
 
   const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges]
+    (params) => {
+      setEdges((eds) => addEdge(params, eds));
+      onSave();
+    },
+    [setEdges, onSave]
   );
+
+  const onLayout = useCallback(
+    (direction) => {
+      const { nodes: layoutedNodes, edges: layoutedEdges } =
+        getLayoutedElements(tree.nodes, tree.edges, direction);
+      setNodes([...layoutedNodes]);
+      setEdges([...layoutedEdges]);
+    },
+    [tree.nodes, tree.edges]
+  );
+
+  React.useEffect(() => {
+    if (update) {
+      onLayout();
+      setUpdate(false);
+    }
+  });
 
   return (
     <Card sx={{ width: "100%", height: "80vh", m: 4, p: 4 }}>
@@ -165,6 +110,7 @@ export default function TreePanel() {
         <ReactFlow
           nodes={nodes}
           edges={edges}
+          nodeTypes={nodeTypes}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
@@ -172,6 +118,38 @@ export default function TreePanel() {
         >
           <Controls />
           <Background variant="dots" gap={12} size={1} />
+          <Panel position="top-left">
+            <Grid container spacing={2} sx={{ p: 1 }}>
+              <Grid
+                item
+                xs={12}
+                display="flex"
+                alignContent="left"
+                justifyContent="left"
+              >
+                <AccountTreeIcon
+                  fontSize="small"
+                  sx={{ color: "text.secondary" }}
+                  onMouseEnter={() => {}}
+                  onMouseLeave={() => {}}
+                  onClick={() => onLayout("TB")}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                display="flex"
+                alignContent="left"
+                justifyContent="left"
+              >
+                <SaveIcon
+                  fontSize="small"
+                  sx={{ color: "text.secondary" }}
+                  onClick={() => onSave()}
+                />
+              </Grid>
+            </Grid>
+          </Panel>
         </ReactFlow>
       </div>
     </Card>
