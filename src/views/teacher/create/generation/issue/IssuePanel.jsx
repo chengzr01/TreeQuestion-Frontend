@@ -1,8 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
 import { Box, Button, Card, Grid, Paper, Typography } from "@mui/material";
-import { alpha } from "@mui/material/styles";
-import palette from "../../../../theme/palette";
 import AddIcon from "@mui/icons-material/Add";
 
 export default function IssuePanel() {

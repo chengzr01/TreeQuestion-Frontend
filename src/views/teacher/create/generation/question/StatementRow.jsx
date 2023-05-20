@@ -8,6 +8,7 @@ import {
   TableRow,
   IconButton,
   Typography,
+  Button,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -40,17 +41,42 @@ export default function StatementRow(props) {
             <Box sx={{ pt: 1, pb: 1 }}>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
-                  <Typography variant="body">
-                    <b>Import as Keys</b>
+                  <Typography
+                    sx={{ fontSize: 14, pt: 1 }}
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    <i>Import as Keys</i>
                   </Typography>
                 </Grid>
                 <Grid item xs={12}>
-                  <Typography variant="body">
-                    <b>Import as Distractors</b>
+                  <Typography
+                    sx={{ fontSize: 14, pt: 1 }}
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    <i>Import as Distractors</i>
                   </Typography>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid
+                  item
+                  xs={10}
+                  display="flex"
+                  justifyContent="center"
+                  alignContent="center"
+                >
                   <HeuristicsSelector />
+                </Grid>
+                <Grid
+                  item
+                  xs={2}
+                  display="flex"
+                  justifyContent="center"
+                  alignContent="center"
+                >
+                  <Button fullWidth variant="outlined">
+                    Add
+                  </Button>
                 </Grid>
                 <Grid
                   item

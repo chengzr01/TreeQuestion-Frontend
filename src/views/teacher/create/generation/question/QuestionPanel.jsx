@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import { Card, Box, Grid, Button } from "@mui/material";
 import { Typography } from "@mui/material";
-import EditableText from "../validation/EditableText";
+import EditableText from "../../validation/EditableText";
 export default function QuestionPanel() {
   const [ID, setID] = useState(10);
   const [stem, setStem] = useState(
