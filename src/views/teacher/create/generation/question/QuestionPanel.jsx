@@ -1,19 +1,37 @@
 import * as React from "react";
 import { useState } from "react";
 
-import { Card, Box, Grid, Button } from "@mui/material";
+import { Card, Grid } from "@mui/material";
 import { Typography } from "@mui/material";
-import EditableText from "../../validation/EditableText";
 
-export default function QuestionPanel({ tree, setTree, update, setUpdate }) {
-  const [ID, setID] = useState(10);
-  const [stem, setStem] = useState(
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
+import PublishedWithChangesOutlinedIcon from "@mui/icons-material/PublishedWithChangesOutlined";
+import Tooltip from "@mui/material/Tooltip";
+import AddIcon from "@mui/icons-material/Add";
+import BackspaceIcon from "@mui/icons-material/Backspace";
+
+export default function QuestionPanel({
+  concepts,
+  setConcepts,
+  field,
+  setField,
+  tree,
+  setTree,
+  update,
+  setUpdate,
+}) {
+  const [ID, setID] = useState("10");
+  const [questionConcepts, setQuestionConcepts] = useState("");
+  const [questionLevel, setQuestionLevel] = useState("");
+  const [questionType, setQuestionType] = useState("Multi-Choice");
+  const [questionStem, setQuestionStem] = useState(
     "What is a potential vulnerability associated with symmetric encryption?"
   );
-  const [options, setOptions] = useState(
+  const [questionOptions, setQuestionOptions] = useState(
     " A. The length of the key \n  B. The randomness of the key \n C. The secrecy of the key \n D. The type of encryption algorithm used"
   );
-  const [answer, setAnswer] = useState("C");
+  const [questionAnswer, setQuestionAnswer] = useState("C");
 
   const handleAdd = () => {
     const id =
@@ -29,12 +47,12 @@ export default function QuestionPanel({ tree, setTree, update, setUpdate }) {
       data: {
         id: id,
         label: id,
-        level: "remember",
-        type: "multi-choice",
-        stem: "question stem",
-        options: "question options",
-        answer: "answer",
-        concept: "Hashing",
+        level: questionLevel,
+        type: questionType,
+        stem: questionStem,
+        options: questionOptions,
+        answer: questionAnswer,
+        concept: questionConcepts,
       },
     };
     var newTree = tree;
@@ -43,102 +61,163 @@ export default function QuestionPanel({ tree, setTree, update, setUpdate }) {
     setUpdate(true);
   };
 
+  const handleClear = () => {
+    setID("");
+    setQuestionStem("");
+    setQuestionOptions("");
+    setQuestionAnswer("");
+  };
+
   return (
     <Card sx={{ m: 4, p: 4 }}>
-      <Typography variant="h5"> 🔍 Questions</Typography>
-      <Box sx={{ pt: 2, pb: 2 }}>
-        <Grid container spacing={2}>
-          <Grid item xs={2}>
-            <Typography
-              sx={{ fontSize: 14, pt: 1 }}
-              color="text.secondary"
-              gutterBottom
-              display="flex"
-              justifyContent="right"
-              alignContent="right"
-            >
-              ID
-            </Typography>
-          </Grid>
-          <Grid item xs={10}>
-            <EditableText
-              defaultValue={ID}
-              updateDefaultValue={setID}
-            ></EditableText>
-          </Grid>
-          <Grid item xs={2}>
-            <Typography
-              sx={{ fontSize: 14, pt: 1 }}
-              color="text.secondary"
-              gutterBottom
-              display="flex"
-              justifyContent="right"
-              alignContent="right"
-            >
-              Stem
-            </Typography>
-          </Grid>
-          <Grid item xs={10}>
-            <EditableText defaultValue={stem} updateDefaultValue={setStem} />
-          </Grid>
-          <Grid item xs={2}>
-            <Typography
-              sx={{ fontSize: 14, pt: 1 }}
-              color="text.secondary"
-              gutterBottom
-              display="flex"
-              justifyContent="right"
-              alignContent="right"
-            >
-              Options
-            </Typography>
-          </Grid>
-          <Grid item xs={10}>
-            <EditableText
-              defaultValue={options}
-              updateDefaultValue={setOptions}
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <Typography
-              sx={{ fontSize: 14, pt: 1 }}
-              color="text.secondary"
-              gutterBottom
-              display="flex"
-              justifyContent="right"
-              alignContent="right"
-            >
-              Answer
-            </Typography>
-          </Grid>
-          <Grid item xs={10}>
-            <EditableText
-              defaultValue={answer}
-              updateDefaultValue={setAnswer}
-            />
-          </Grid>
-          <Grid
-            item
-            xs={6}
-            display="flex"
-            justifyContent="center"
-            alignContent="center"
-          >
-            <Button variant="outlined" onClick={handleAdd}>
-              Add
-            </Button>
-          </Grid>
-          <Grid
-            item
-            xs={6}
-            display="flex"
-            justifyContent="center"
-            alignContent="center"
-          >
-            <Button variant="outlined">Clear</Button>
-          </Grid>
+      <Grid container spacing={2}>
+        <Grid
+          item
+          xs={12}
+          display="flex"
+          alignContent="left"
+          justifyContent="left"
+        >
+          <Typography variant="h5"> 🔍 Questions</Typography>
         </Grid>
-      </Box>
+
+        <Grid item xs={12}>
+          <Autocomplete
+            size="small"
+            disablePortal
+            options={concepts}
+            value={questionConcepts}
+            onChange={(event, newQuestionConcepts) => {
+              setQuestionConcepts(newQuestionConcepts);
+            }}
+            renderInput={(params) => <TextField {...params} label="Concepts" />}
+          />
+        </Grid>
+        <Grid item xs={5}>
+          <Autocomplete
+            size="small"
+            disablePortal
+            options={[
+              "Remember",
+              "Understand",
+              "Apply",
+              "Analyze",
+              "Evaluate",
+              "Create",
+            ]}
+            value={questionLevel}
+            onChange={(event, newQuestionLevel) => {
+              setQuestionLevel(newQuestionLevel);
+            }}
+            renderInput={(params) => <TextField {...params} label="Level" />}
+          />
+        </Grid>
+        <Grid item xs={5}>
+          <Autocomplete
+            size="small"
+            disablePortal
+            options={["Multi-Choice", "True-False"]}
+            value={questionType}
+            onChange={(event, newQuestionType) => {
+              setQuestionType(newQuestionType);
+            }}
+            renderInput={(params) => <TextField {...params} label="Type" />}
+          />
+        </Grid>
+        <Grid
+          item
+          xs={2}
+          display="flex"
+          alignContent="center"
+          justifyContent="center"
+        >
+          <Tooltip title="Confirm">
+            <PublishedWithChangesOutlinedIcon sx={{ m: 1 }} />
+          </Tooltip>
+        </Grid>
+        <Grid item xs={2}>
+          <Typography
+            sx={{ fontSize: 14 }}
+            color="text.secondary"
+            gutterBottom
+            display="flex"
+            justifyContent="right"
+            alignContent="right"
+          >
+            ID
+          </Typography>
+        </Grid>
+        <Grid item xs={10}>
+          {ID}
+        </Grid>
+        <Grid item xs={2}>
+          <Typography
+            sx={{ fontSize: 14 }}
+            color="text.secondary"
+            gutterBottom
+            display="flex"
+            justifyContent="right"
+            alignContent="right"
+          >
+            Stem
+          </Typography>
+        </Grid>
+        <Grid item xs={10}>
+          {questionStem}
+        </Grid>
+        <Grid item xs={2}>
+          <Typography
+            sx={{ fontSize: 14 }}
+            color="text.secondary"
+            gutterBottom
+            display="flex"
+            justifyContent="right"
+            alignContent="right"
+          >
+            Options
+          </Typography>
+        </Grid>
+        <Grid item xs={10}>
+          {questionOptions}
+        </Grid>
+        <Grid item xs={2}>
+          <Typography
+            sx={{ fontSize: 14 }}
+            color="text.secondary"
+            gutterBottom
+            display="flex"
+            justifyContent="right"
+            alignContent="right"
+          >
+            Answer
+          </Typography>
+        </Grid>
+        <Grid item xs={10}>
+          {questionAnswer}
+        </Grid>
+        <Grid
+          item
+          xs={6}
+          display="flex"
+          justifyContent="center"
+          alignContent="center"
+        >
+          <Tooltip title="Add">
+            <AddIcon onClick={handleAdd} />
+          </Tooltip>
+        </Grid>
+        <Grid
+          item
+          xs={6}
+          display="flex"
+          justifyContent="center"
+          alignContent="center"
+        >
+          <Tooltip title="Clear">
+            <BackspaceIcon onClick={handleClear} />
+          </Tooltip>
+        </Grid>
+      </Grid>
     </Card>
   );
 }

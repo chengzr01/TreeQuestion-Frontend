@@ -15,7 +15,14 @@ import {
 
 import StatementRow from "./StatementRow";
 
-export default function StatementTable({ graph, setGraph }) {
+export default function StatementTable({
+  graph,
+  setGraph,
+  keyCandidates,
+  setKeyCandidates,
+  distractorCandidates,
+  setDistractorCandidates,
+}) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -55,7 +62,16 @@ export default function StatementTable({ graph, setGraph }) {
                   label: edge.data.label,
                   target: graph.nodes[parseInt(edge.target)].data.label,
                 };
-                return <StatementRow key={edge.id} row={row}></StatementRow>;
+                return (
+                  <StatementRow
+                    key={edge.id}
+                    row={row}
+                    keyCandidates={keyCandidates}
+                    setKeyCandidates={setKeyCandidates}
+                    distractorCandidates={distractorCandidates}
+                    setDistractorCandidates={setDistractorCandidates}
+                  ></StatementRow>
+                );
               })}
           </TableBody>
         </Table>

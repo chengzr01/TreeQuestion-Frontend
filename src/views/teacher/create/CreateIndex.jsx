@@ -1,5 +1,5 @@
 import * as React from "react";
-
+import { useState } from "react";
 // MaterialUI
 import { Box, Tabs, Tab, Typography } from "@mui/material";
 
@@ -36,8 +36,14 @@ function a11yProps(index) {
 }
 
 export default function CreateIndex() {
-  const [value, setValue] = React.useState(0);
-  const [graph, setGraph] = React.useState({ nodes: [], edges: [] });
+  const [value, setValue] = useState(0);
+  const [concepts, setConcepts] = useState([
+    "Hashing",
+    "Symmetric Encryption",
+    "Message Authentication Code",
+  ]);
+  const [field, setField] = useState("");
+  const [graph, setGraph] = useState({ nodes: [], edges: [] });
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -53,7 +59,14 @@ export default function CreateIndex() {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <IdeationIndex value={value} setValue={setValue} />
+        <IdeationIndex
+          value={value}
+          setValue={setValue}
+          concepts={concepts}
+          setConcepts={setConcepts}
+          field={field}
+          setField={setField}
+        />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <ValidationIndex
@@ -67,6 +80,10 @@ export default function CreateIndex() {
         <GenerationIndex
           value={value}
           setValue={setValue}
+          concepts={concepts}
+          setConcepts={setConcepts}
+          field={field}
+          setField={setField}
           graph={graph}
           setGraph={setGraph}
         />

@@ -16,7 +16,7 @@ import "reactflow/dist/style.css";
 import axios from "axios";
 import dagre from "dagre";
 
-import { Grid } from "@mui/material";
+import { Grid, Tooltip } from "@mui/material";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import SaveIcon from "@mui/icons-material/Save";
 
@@ -287,13 +287,15 @@ function AddNodeOnEdgeDrop({ graph, setGraph }) {
               alignContent="left"
               justifyContent="left"
             >
-              <AccountTreeIcon
-                fontSize="small"
-                sx={{ color: "text.secondary" }}
-                onMouseEnter={() => {}}
-                onMouseLeave={() => {}}
-                onClick={() => onLayout("RL")}
-              />
+              <Tooltip title="Auto Layout">
+                <AccountTreeIcon
+                  fontSize="small"
+                  sx={{ color: "text.secondary" }}
+                  onMouseEnter={() => {}}
+                  onMouseLeave={() => {}}
+                  onClick={() => onLayout("RL")}
+                />
+              </Tooltip>
             </Grid>
             <Grid
               item
@@ -302,11 +304,13 @@ function AddNodeOnEdgeDrop({ graph, setGraph }) {
               alignContent="left"
               justifyContent="left"
             >
-              <SaveIcon
-                fontSize="small"
-                sx={{ color: "text.secondary" }}
-                onClick={() => onSave()}
-              />
+              <Tooltip title="Save">
+                <SaveIcon
+                  fontSize="small"
+                  sx={{ color: "text.secondary" }}
+                  onClick={() => onSave()}
+                />
+              </Tooltip>
             </Grid>
           </Grid>
         </Panel>

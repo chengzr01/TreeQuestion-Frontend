@@ -35,16 +35,16 @@ export default function TreeNode({ data, isConnectable }) {
   };
 
   const getBackgroundColor = () => {
-    if (data.level === "remember") return `${alpha(palette.primary.main, 0.1)}`;
-    else if (data.level === "understand")
+    if (data.level === "Remember") return `${alpha(palette.primary.main, 0.1)}`;
+    else if (data.level === "Understand")
       return `${alpha(palette.primary.main, 0.21)}`;
-    else if (data.level === "apply")
+    else if (data.level === "Apply")
       return `${alpha(palette.primary.main, 0.35)}`;
-    else if (data.level === "analyze")
+    else if (data.level === "Analyze")
       return `${alpha(palette.primary.main, 0.52)}`;
-    else if (data.level === "evaluate")
+    else if (data.level === "Evaluate")
       return `${alpha(palette.primary.main, 0.73)}`;
-    else if (data.level === "create")
+    else if (data.level === "Create")
       return `${alpha(palette.primary.main, 1.0)}`;
   };
   return (

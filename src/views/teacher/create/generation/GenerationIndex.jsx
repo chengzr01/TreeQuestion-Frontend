@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { Box } from "@mui/material";
 import { Grid } from "@mui/material";
@@ -10,21 +10,47 @@ import TreePanel from "./tree/TreePanel";
 import IssuePanel from "./issue/IssuePanel";
 import StatePanel from "./tree/StatePanel";
 
-export default function GenerationIndex({ value, setValue, graph, setGraph }) {
+export default function GenerationIndex({
+  value,
+  setValue,
+  concepts,
+  setConcepts,
+  field,
+  setField,
+  graph,
+  setGraph,
+}) {
   const [tree, setTree] = useState({ nodes: [], edges: [] });
+  const [keyCandidates, setKeyCandidates] = useState([]);
+  const [distractorCandidates, setDistractorCandidates] = useState([]);
   const [update, setUpdate] = useState(true);
   return (
     <Box>
       <Grid container spacing={2}>
         <Grid item xs={8}>
-          <StatementTable graph={graph} setGraph={setGraph} />
+          <StatementTable
+            graph={graph}
+            setGraph={setGraph}
+            keyCandidates={keyCandidates}
+            setKeyCandidates={setKeyCandidates}
+            distractorCandidates={distractorCandidates}
+            setDistractorCandidates={setDistractorCandidates}
+          />
         </Grid>
         <Grid item xs={4}>
           <QuestionPanel
             tree={tree}
+            concepts={concepts}
+            setConcepts={setConcepts}
+            field={field}
+            setField={setField}
             setTree={setTree}
             update={update}
             setUpdate={setUpdate}
+            keyCandidates={keyCandidates}
+            setKeyCandidates={setKeyCandidates}
+            distractorCandidates={distractorCandidates}
+            setDistractorCandidates={setDistractorCandidates}
           />
         </Grid>
         <Grid item xs={8}>

@@ -1,6 +1,6 @@
 import * as React from "react";
-import { useCallback, useState, useEffect } from "react";
-import { Card, Grid } from "@mui/material";
+import { useCallback, useState } from "react";
+import { Card, Grid, Tooltip } from "@mui/material";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import SaveIcon from "@mui/icons-material/Save";
 
@@ -127,13 +127,15 @@ export default function TreePanel({ tree, setTree, update, setUpdate }) {
                 alignContent="left"
                 justifyContent="left"
               >
-                <AccountTreeIcon
-                  fontSize="small"
-                  sx={{ color: "text.secondary" }}
-                  onMouseEnter={() => {}}
-                  onMouseLeave={() => {}}
-                  onClick={() => onLayout("TB")}
-                />
+                <Tooltip title="Auto Layout">
+                  <AccountTreeIcon
+                    fontSize="small"
+                    sx={{ color: "text.secondary" }}
+                    onMouseEnter={() => {}}
+                    onMouseLeave={() => {}}
+                    onClick={() => onLayout("TB")}
+                  />
+                </Tooltip>
               </Grid>
               <Grid
                 item
@@ -142,11 +144,13 @@ export default function TreePanel({ tree, setTree, update, setUpdate }) {
                 alignContent="left"
                 justifyContent="left"
               >
-                <SaveIcon
-                  fontSize="small"
-                  sx={{ color: "text.secondary" }}
-                  onClick={() => onSave()}
-                />
+                <Tooltip title="Save">
+                  <SaveIcon
+                    fontSize="small"
+                    sx={{ color: "text.secondary" }}
+                    onClick={() => onSave()}
+                  />
+                </Tooltip>
               </Grid>
             </Grid>
           </Panel>

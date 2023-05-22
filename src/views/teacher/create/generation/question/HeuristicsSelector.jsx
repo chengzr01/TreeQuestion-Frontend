@@ -26,7 +26,6 @@ export default function HeuristicsSelector() {
       defaultValue={[]}
       filterSelectedOptions
       renderInput={(params) => {
-        console.log(params);
         return <TextField {...params} label="Heuristics" />;
       }}
     />

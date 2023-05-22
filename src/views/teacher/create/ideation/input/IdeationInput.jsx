@@ -10,9 +10,14 @@ import TextField from "@mui/material/TextField";
 
 import IdeationLevels from "./IdeationLevels";
 
-export default function IdeationInput({ update, setUpdate }) {
-  const [concepts, setConcepts] = useState([]);
-  const [field, setField] = useState("");
+export default function IdeationInput({
+  update,
+  setUpdate,
+  concepts,
+  setConcepts,
+  field,
+  setField,
+}) {
   const [levels, setLevels] = useState([]);
 
   const handleInputChange = (event) => {
