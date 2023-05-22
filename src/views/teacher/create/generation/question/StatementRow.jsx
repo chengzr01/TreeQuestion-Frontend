@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
   Box,
@@ -66,7 +66,7 @@ function StatementCard({
         mb: 1,
         p: 2,
         "&:hover": {
-          backgroundColor: `${alpha(palette.info.main, 0.2)}`,
+          backgroundColor: `${alpha(palette.primary.main, 0.2)}`,
         },
       }}
       onClick={handleClick}
@@ -84,13 +84,39 @@ export default function StatementRow({
   setDistractorCandidates,
 }) {
   const [open, setOpen] = useState(false);
-  const [keyStatement, setKeyStatement] = useState(
-    "DES, AES, Blowfish	Belongs to	Symmetric encryption algorithms"
-  );
-  const [distractorStatements, setDistractorStatements] = useState([
-    "SHA-1	Belongs to	Symmetric encryption algorithms",
-    "SHA-2	Belongs to	Symmetric encryption algorithms",
-  ]);
+  const [keyStatement, setKeyStatement] = useState("");
+  const [keyStatementLoad, setKeyStatementLoad] = useState(false);
+  const [distractorStatements, setDistractorStatements] = useState([]);
+  const [heuristicValueList, setHeuristicValueList] = useState([]);
+
+  const getDistractingStatment = (event) => {
+    for (var index in heuristicValueList) {
+      var newStatement =
+        row.source +
+        " " +
+        row.label +
+        " " +
+        row.target +
+        " " +
+        heuristicValueList[index].content +
+        " " +
+        heuristicValueList[index].level;
+      var newStatementList = distractorStatements;
+      newStatementList.push(newStatement);
+      setDistractorStatements(newStatementList);
+    }
+    return;
+  };
+
+  const getKeyStatement = () => {
+    setKeyStatement(row.source + " " + row.label + " " + row.target);
+  };
+
+  useEffect(() => {
+    if (!keyStatementLoad) {
+      getKeyStatement();
+    }
+  });
 
   return (
     <React.Fragment>
@@ -153,7 +179,10 @@ export default function StatementRow({
                   justifyContent="center"
                   alignContent="center"
                 >
-                  <HeuristicsSelector />
+                  <HeuristicsSelector
+                    heuristicValue={heuristicValueList}
+                    setHeuristicValue={setHeuristicValueList}
+                  />
                 </Grid>
                 <Grid
                   item
@@ -163,7 +192,12 @@ export default function StatementRow({
                   alignContent="left"
                 >
                   <Tooltip title="Generate">
-                    <PublishedWithChangesOutlinedIcon sx={{ m: 1 }} />
+                    <PublishedWithChangesOutlinedIcon
+                      sx={{ m: 1 }}
+                      onClick={(event) => {
+                        getDistractingStatment(event);
+                      }}
+                    />
                   </Tooltip>
                 </Grid>
                 <Grid item xs={12}>
