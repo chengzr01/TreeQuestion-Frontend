@@ -24,6 +24,7 @@ export default function GenerationIndex({
   const [keyCandidates, setKeyCandidates] = useState([]);
   const [distractorCandidates, setDistractorCandidates] = useState([]);
   const [update, setUpdate] = useState(true);
+  const [edited, setEdited] = useState(false);
   return (
     <Box>
       <Grid container spacing={2}>
@@ -51,6 +52,8 @@ export default function GenerationIndex({
             setKeyCandidates={setKeyCandidates}
             distractorCandidates={distractorCandidates}
             setDistractorCandidates={setDistractorCandidates}
+            edited={edited}
+            setEdited={setEdited}
           />
         </Grid>
         <Grid item xs={8}>
@@ -62,7 +65,14 @@ export default function GenerationIndex({
           />
         </Grid>
         <Grid item xs={4}>
-          <StatePanel tree={tree} setTree={setTree} />
+          <StatePanel
+            tree={tree}
+            setTree={setTree}
+            edited={edited}
+            setEdited={setEdited}
+            concepts={concepts}
+            field={field}
+          />
         </Grid>
         <Grid item xs={12}>
           <IssuePanel />

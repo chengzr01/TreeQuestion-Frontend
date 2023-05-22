@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useCallback, useState, useEffect, useRef } from "react";
+
 import ReactFlow, {
   applyEdgeChanges,
   applyNodeChanges,
@@ -150,14 +151,12 @@ function AddNodeOnEdgeDrop({ graph, setGraph }) {
       var layoutResult = getLayoutedElements(newNodes, newEdges);
       setNodes(layoutResult.nodes);
       setEdges(layoutResult.edges);
+      setGraph({ nodes: layoutResult.nodes, edges: layoutResult.edges });
     });
   };
 
   const onSave = useCallback(() => {
-    console.log(nodes);
-    console.log(edges);
-    var newGraph = { nodes: nodes, edges: edges };
-    setGraph(newGraph);
+    setGraph({ nodes: nodes, edges: edges });
   }, [nodes, edges, setGraph]);
 
   const onLayout = useCallback(

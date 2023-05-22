@@ -1,5 +1,7 @@
 import * as React from "react";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
+import cookie from "react-cookies";
+
 import { Card, Grid, Tooltip } from "@mui/material";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import SaveIcon from "@mui/icons-material/Save";
@@ -22,8 +24,8 @@ const nodeTypes = { treenode: TreeNode };
 
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
-const nodeWidth = 172;
-const nodeHeight = 36;
+const nodeWidth = 200;
+const nodeHeight = 50;
 
 const getLayoutedElements = (nodes, edges, direction = "TB") => {
   const isHorizontal = direction === "LR";
@@ -61,6 +63,11 @@ export default function TreePanel({ tree, setTree, update, setUpdate }) {
 
   const onSave = useCallback(() => {
     setTree({ nodes: nodes, edges: edges });
+    let cookieSetup = {
+      path: "/",
+      domain: window.location.hostname,
+    };
+    cookie.save("tree", { nodes: nodes, edges: edges }, cookieSetup);
   }, [nodes, edges, setTree]);
 
   const onNodesChange = useCallback(
@@ -97,7 +104,7 @@ export default function TreePanel({ tree, setTree, update, setUpdate }) {
     [tree.nodes, tree.edges]
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (update) {
       onLayout();
       setUpdate(false);

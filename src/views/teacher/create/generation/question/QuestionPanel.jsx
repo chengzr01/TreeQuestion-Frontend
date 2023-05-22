@@ -20,33 +20,53 @@ export default function QuestionPanel({
   setTree,
   update,
   setUpdate,
+  edited,
+  setEdited,
 }) {
-  const [ID, setID] = useState("10");
+  const [ID, setID] = useState("0");
   const [questionConcepts, setQuestionConcepts] = useState("");
   const [questionLevel, setQuestionLevel] = useState("");
   const [questionType, setQuestionType] = useState("Multi-Choice");
-  const [questionStem, setQuestionStem] = useState(
-    "What is a potential vulnerability associated with symmetric encryption?"
-  );
-  const [questionOptions, setQuestionOptions] = useState(
-    " A. The length of the key \n  B. The randomness of the key \n C. The secrecy of the key \n D. The type of encryption algorithm used"
-  );
-  const [questionAnswer, setQuestionAnswer] = useState("C");
+  const [questionStem, setQuestionStem] = useState("");
+  const [questionOptions, setQuestionOptions] = useState("");
+  const [questionAnswer, setQuestionAnswer] = useState("");
+
+  const getQuestion = (event) => {
+    var maxID = 0;
+    for (var index in tree.nodes) {
+      if (parseInt(tree.nodes[index].id) >= maxID) {
+        maxID = parseInt(tree.nodes[index].id);
+      }
+    }
+    console.log(maxID);
+    setID((maxID + 1).toString());
+    var body = {
+      concepts: questionConcepts,
+      field: field,
+      level: questionLevel,
+      type: questionType,
+    };
+    console.log(body);
+    var newQuestionStem =
+      "What is a potential vulnerability associated with symmetric encryption?";
+    var newQuesrionOptions =
+      " A. The length of the key \n  B. The randomness of the key \n C. The secrecy of the key \n D. The type of encryption algorithm used";
+    var newQuestionAnswer = "C";
+    setQuestionStem(newQuestionStem);
+    setQuestionOptions(newQuesrionOptions);
+    setQuestionAnswer(newQuestionAnswer);
+  };
 
   const handleAdd = () => {
-    const id =
-      tree.nodes.length > 0
-        ? (parseInt(tree.nodes[tree.nodes.length - 1].id) + 1).toString()
-        : "0";
     const newNode = {
-      id: id,
+      id: ID,
       type: "treenode",
       draggable: true,
       connectable: true,
       position: { x: 0, y: 0 },
       data: {
-        id: id,
-        label: id,
+        id: ID,
+        label: ID,
         level: questionLevel,
         type: questionType,
         stem: questionStem,
@@ -59,6 +79,7 @@ export default function QuestionPanel({
     newTree.nodes.push(newNode);
     setTree(newTree);
     setUpdate(true);
+    setEdited(true);
   };
 
   const handleClear = () => {
@@ -132,7 +153,12 @@ export default function QuestionPanel({
           justifyContent="center"
         >
           <Tooltip title="Confirm">
-            <PublishedWithChangesOutlinedIcon sx={{ m: 1 }} />
+            <PublishedWithChangesOutlinedIcon
+              sx={{ m: 1 }}
+              onClick={(event) => {
+                getQuestion(event);
+              }}
+            />
           </Tooltip>
         </Grid>
         <Grid item xs={2}>
