@@ -19,11 +19,10 @@ export default function QuestionView({
 }) {
   const [submitDialogOpen, setSubmitDialogOpen] = useState(false);
   const [skipDialogOpen, setSkipDialogOpen] = useState(false);
-  const [choice, setChoice] = useState(
-    options.map((option) => {
-      return { choice: option, result: false };
-    })
-  );
+  const [choice, setChoice] = useState();
+  // options.map((option) => {
+  //   return { choice: option, result: false };
+  // })
 
   const handleClickSubmit = (event) => {
     event.preventDefault();
@@ -35,16 +34,68 @@ export default function QuestionView({
     setSkipDialogOpen(true);
   };
 
+  const handleStart = (event) => {
+    console.log("start");
+  };
+
+  const handleEnd = (event) => {
+    console.log("end");
+  };
+
   return (
     <Paper sx={{ width: "100%", p: 2, height: "60vh" }}>
       <CardContent>
-        <Typography variant="body" color="grey.500" component="div">
-          Question ID: {id}
-        </Typography>
+        <Grid container spacing={2}>
+          <Grid
+            item
+            xs={10}
+            display={"flex"}
+            justifyContent={"left"}
+            alignContent={"left"}
+          >
+            <Typography variant="body" color="grey.500" component="div">
+              Question ID: {id}
+            </Typography>
+          </Grid>
+          <Grid
+            item
+            xs={1}
+            display={"flex"}
+            justifyContent={"center"}
+            alignContent={"center"}
+          >
+            <Button
+              variant="outlined"
+              onClick={(event) => {
+                handleStart();
+              }}
+            >
+              Start
+            </Button>
+          </Grid>
+          <Grid
+            item
+            xs={1}
+            display={"flex"}
+            justifyContent={"center"}
+            alignContent={"center"}
+          >
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={(event) => {
+                handleEnd();
+              }}
+            >
+              End
+            </Button>
+          </Grid>
+        </Grid>
+
         <Typography sx={{ fontSize: 18 }} component="div">
           <b>{stem}</b>
         </Typography>
-        {options.map((option) => {
+        {/* {options.map((option) => {
           return (
             <OptionCard
               option={option}
@@ -52,7 +103,7 @@ export default function QuestionView({
               setChoice={setChoice}
             ></OptionCard>
           );
-        })}
+        })} */}
       </CardContent>
       <CardActions>
         <Grid container>

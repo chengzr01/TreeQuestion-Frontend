@@ -6,256 +6,598 @@ import Grid from "@mui/material/Grid";
 
 import TreeSelector from "./tree/TreeSelector";
 import QuestionView from "./question/QuestionView";
-import ConsoleIndex from "./console/ConsoleIndex";
-import TreeIndex from "./tree/TreeIndex";
-import ClickableNode from "./tree/diagram/ClickableNode";
-
-const STATE = { INACTIVE: 0, ACTIVE: 1, CORRECT: 2, WRONG: 3 };
-
-const nodeTypes = { clickable: ClickableNode };
 
 export default function AnswerIndex() {
-  const [activeTree, setActiveTree] = useState({
-    id: 1,
-    nodes: [
-      {
-        id: "1",
-        type: "clickable",
-        draggable: false,
-        connectable: false,
-        position: { x: 0, y: 0 },
-        data: { label: "Question ID.1", state: STATE.CORRECT },
-      },
-      {
-        id: "2",
-        type: "clickable",
-        draggable: false,
-        connectable: false,
-        position: { x: 0, y: 0 },
-        data: { label: "Question ID.2", state: STATE.CORRECT },
-      },
-      {
-        id: "3",
-        type: "clickable",
-        draggable: false,
-        connectable: false,
-        position: { x: 0, y: 0 },
-        data: { label: "Question ID.3", state: STATE.ACTIVE },
-      },
-      {
-        id: "4",
-        type: "clickable",
-        draggable: false,
-        connectable: false,
-        position: { x: 0, y: 0 },
-        data: { label: "Question ID.4", state: STATE.WRONG },
-      },
-      {
-        id: "5",
-        type: "clickable",
-        draggable: false,
-        connectable: false,
-        position: { x: 0, y: 0 },
-        data: { label: "Question ID.5", state: STATE.INACTIVE },
-      },
-      {
-        id: "6",
-        type: "clickable",
-        draggable: false,
-        connectable: false,
-        position: { x: 0, y: 0 },
-        data: { label: "Question ID. 6", state: STATE.INACTIVE },
-      },
-      {
-        id: "7",
-        type: "clickable",
-        draggable: false,
-        connectable: false,
-        position: { x: 0, y: 0 },
-        data: { label: "Question ID. 7", state: STATE.INACTIVE },
-      },
-      {
-        id: "8",
-        type: "clickable",
-        draggable: false,
-        connectable: false,
-        position: { x: 0, y: 0 },
-        data: { label: "Question ID. 8", state: STATE.INACTIVE },
-      },
-      {
-        id: "9",
-        type: "clickable",
-        draggable: false,
-        connectable: false,
-        position: { x: 0, y: 0 },
-        data: { label: "Question ID. 9", state: STATE.INACTIVE },
-      },
-    ],
-    edges: [
-      { id: "e1-2", source: "1", target: "2" },
-      { id: "e2-3", source: "2", target: "3" },
-      { id: "e2-4", source: "2", target: "4" },
-      { id: "e1-5", source: "1", target: "5" },
-      { id: "e5-9", source: "5", target: "9" },
-      { id: "e4-6", source: "4", target: "6" },
-      { id: "e6-7", source: "6", target: "7" },
-      { id: "e6-7", source: "6", target: "8" },
-    ],
-  });
+  const [activeTree, setActiveTree] = useState({});
+  const [activeQuestion, setActiveQuestion] = useState({});
+  const [activeMessageList, setActiveMessageList] = useState([]);
 
-  const [activeQuestion, setActiveQuestion] = useState({
-    id: 3,
-    stem: "What is the process of implementing symmetric encryption to protect sensitive data?",
-    options: [
-      "A. Selecting a different key for encryption and decryption",
-      "B. Sharing the key with unauthorized parties",
-      "C. Choosing an appropriate algorithm and key size",
-      "D. Storing the key in a public location",
-    ],
-  });
-
-  const [activeMessageList, setActiveMessageList] = useState([
-    {
-      text: "Question 1: You are right! Next Question: Question 2.",
-      label: "right",
-    },
-    {
-      text: "Question 2: You are right! Next Question: Question 4.",
-      label: "right",
-    },
-    {
-      text: "Question 4: You are wrong! Next Question: Question 3.",
-      label: "wrong",
-    },
-  ]);
-
-  const handleSubmit = () => {
-    setActiveTree({
-      id: 1,
+  const getActiveTree = () => {
+    var sourceTree = {
       nodes: [
         {
           id: "1",
-          type: "clickable",
-          draggable: false,
-          connectable: false,
-          position: { x: 0, y: 0 },
-          data: { label: "Question ID.1", state: STATE.CORRECT },
+          type: "treenode",
+          draggable: true,
+          connectable: true,
+          position: {
+            x: 625,
+            y: 0,
+          },
+          data: {
+            id: "1",
+            label: "1",
+            level: "Remember",
+            type: "True-False",
+            stem: "What is a potential vulnerability associated with symmetric encryption?",
+            options:
+              " A. The length of the key \n  B. The randomness of the key \n C. The secrecy of the key \n D. The type of encryption algorithm used",
+            answer: "C",
+            concept: "Hashing",
+          },
+          targetPosition: "top",
+          sourcePosition: "bottom",
+          width: 206,
+          height: 50,
+          selected: false,
+          positionAbsolute: {
+            x: 285.7919004467401,
+            y: -188.8323982130396,
+          },
+          dragging: false,
         },
         {
-          id: "2",
-          type: "clickable",
-          draggable: false,
-          connectable: false,
-          position: { x: 0, y: 0 },
-          data: { label: "Question ID.2", state: STATE.CORRECT },
+          id: "1",
+          type: "treenode",
+          draggable: true,
+          connectable: true,
+          position: {
+            x: 625,
+            y: 0,
+          },
+          data: {
+            id: "1",
+            label: "1",
+            level: "Remember",
+            type: "True-False",
+            stem: "What is a potential vulnerability associated with symmetric encryption?",
+            options:
+              " A. The length of the key \n  B. The randomness of the key \n C. The secrecy of the key \n D. The type of encryption algorithm used",
+            answer: "C",
+            concept: "Symmetric Encryption",
+          },
+          targetPosition: "top",
+          sourcePosition: "bottom",
+          selected: false,
+          positionAbsolute: {
+            x: 285.7919004467401,
+            y: -188.8323982130396,
+          },
+          dragging: false,
+          width: 206,
+          height: 50,
         },
         {
           id: "3",
-          type: "clickable",
-          draggable: false,
-          connectable: false,
-          position: { x: 0, y: 0 },
-          data: { label: "Question ID.3", state: STATE.CORRECT },
+          type: "treenode",
+          draggable: true,
+          connectable: true,
+          position: {
+            x: 1125,
+            y: 100,
+          },
+          data: {
+            id: "3",
+            label: "3",
+            level: "Remember",
+            type: "True-False",
+            stem: "What is a potential vulnerability associated with symmetric encryption?",
+            options:
+              " A. The length of the key \n  B. The randomness of the key \n C. The secrecy of the key \n D. The type of encryption algorithm used",
+            answer: "C",
+            concept: "Message Authentication Code",
+          },
+          targetPosition: "top",
+          sourcePosition: "bottom",
+          width: 263,
+          height: 50,
+          selected: false,
+          positionAbsolute: {
+            x: 98,
+            y: 92,
+          },
+          dragging: true,
         },
         {
           id: "4",
-          type: "clickable",
-          draggable: false,
-          connectable: false,
-          position: { x: 0, y: 0 },
-          data: { label: "Question ID.4", state: STATE.WRONG },
+          type: "treenode",
+          draggable: true,
+          connectable: true,
+          position: {
+            x: 125,
+            y: 100,
+          },
+          data: {
+            id: "4",
+            label: "4",
+            level: "Remember",
+            type: "True-False",
+            stem: "What is a potential vulnerability associated with symmetric encryption?",
+            options:
+              " A. The length of the key \n  B. The randomness of the key \n C. The secrecy of the key \n D. The type of encryption algorithm used",
+            answer: "C",
+            concept: "Hashing",
+          },
+          targetPosition: "top",
+          sourcePosition: "bottom",
+          width: 109,
+          height: 50,
+          selected: false,
+          positionAbsolute: {
+            x: -20,
+            y: 72,
+          },
+          dragging: false,
         },
         {
           id: "5",
-          type: "clickable",
-          draggable: false,
-          connectable: false,
-          position: { x: 0, y: 0 },
-          data: { label: "Question ID.5", state: STATE.INACTIVE },
+          type: "treenode",
+          draggable: true,
+          connectable: true,
+          position: {
+            x: 625,
+            y: 100,
+          },
+          data: {
+            id: "5",
+            label: "5",
+            level: "Remember",
+            type: "True-False",
+            stem: "What is a potential vulnerability associated with symmetric encryption?",
+            options:
+              " A. The length of the key \n  B. The randomness of the key \n C. The secrecy of the key \n D. The type of encryption algorithm used",
+            answer: "C",
+            concept: "Symmetric Encryption",
+          },
+          targetPosition: "top",
+          sourcePosition: "bottom",
+          width: 206,
+          height: 50,
+          selected: false,
+          positionAbsolute: {
+            x: 61.58678908801937,
+            y: -5.901012444157573,
+          },
+          dragging: false,
         },
         {
           id: "6",
-          type: "clickable",
-          draggable: false,
-          connectable: false,
-          position: { x: 0, y: 0 },
-          data: { label: "Question ID. 6", state: STATE.INACTIVE },
+          type: "treenode",
+          draggable: true,
+          connectable: true,
+          position: {
+            x: 0,
+            y: 200,
+          },
+          data: {
+            id: "6",
+            label: "6",
+            level: "Apply",
+            type: "True-False",
+            stem: "What is a potential vulnerability associated with symmetric encryption?",
+            options:
+              " A. The length of the key \n  B. The randomness of the key \n C. The secrecy of the key \n D. The type of encryption algorithm used",
+            answer: "C",
+            concept: "Hashing",
+          },
+          targetPosition: "top",
+          sourcePosition: "bottom",
+          width: 109,
+          height: 50,
+          selected: false,
+          positionAbsolute: {
+            x: 277,
+            y: 256,
+          },
+          dragging: false,
         },
         {
           id: "7",
-          type: "clickable",
-          draggable: false,
-          connectable: false,
-          position: { x: 0, y: 0 },
-          data: { label: "Question ID. 7", state: STATE.INACTIVE },
+          type: "treenode",
+          draggable: true,
+          connectable: true,
+          position: {
+            x: 250,
+            y: 200,
+          },
+          data: {
+            id: "7",
+            label: "7",
+            level: "Understand",
+            type: "True-False",
+            stem: "What is a potential vulnerability associated with symmetric encryption?",
+            options:
+              " A. The length of the key \n  B. The randomness of the key \n C. The secrecy of the key \n D. The type of encryption algorithm used",
+            answer: "C",
+            concept: "Hashing",
+          },
+          targetPosition: "top",
+          sourcePosition: "bottom",
+          selected: false,
+          positionAbsolute: {
+            x: 631,
+            y: 324,
+          },
+          dragging: false,
+          width: 109,
+          height: 50,
         },
         {
           id: "8",
-          type: "clickable",
-          draggable: false,
-          connectable: false,
-          position: { x: 0, y: 0 },
-          data: { label: "Question ID. 8", state: STATE.INACTIVE },
+          type: "treenode",
+          draggable: true,
+          connectable: true,
+          position: {
+            x: 125,
+            y: 300,
+          },
+          data: {
+            id: "8",
+            label: "8",
+            level: "Analyze",
+            type: "True-False",
+            stem: "What is a potential vulnerability associated with symmetric encryption?",
+            options:
+              " A. The length of the key \n  B. The randomness of the key \n C. The secrecy of the key \n D. The type of encryption algorithm used",
+            answer: "C",
+            concept: "Hashing",
+          },
+          targetPosition: "top",
+          sourcePosition: "bottom",
+          selected: false,
+          positionAbsolute: {
+            x: 581,
+            y: 432,
+          },
+          dragging: false,
+          width: 109,
+          height: 50,
         },
         {
           id: "9",
-          type: "clickable",
-          draggable: false,
-          connectable: false,
-          position: { x: 0, y: 0 },
-          data: { label: "Question ID. 9", state: STATE.INACTIVE },
+          type: "treenode",
+          draggable: true,
+          connectable: true,
+          position: {
+            x: 500,
+            y: 300,
+          },
+          data: {
+            id: "9",
+            label: "9",
+            level: "Evaluate",
+            type: "True-False",
+            stem: "What is a potential vulnerability associated with symmetric encryption?",
+            options:
+              " A. The length of the key \n  B. The randomness of the key \n C. The secrecy of the key \n D. The type of encryption algorithm used",
+            answer: "C",
+            concept: "Hashing",
+          },
+          targetPosition: "top",
+          sourcePosition: "bottom",
+          selected: false,
+          positionAbsolute: {
+            x: 781,
+            y: 438,
+          },
+          dragging: false,
+          width: 109,
+          height: 50,
         },
         {
           id: "10",
-          type: "clickable",
-          draggable: false,
-          connectable: false,
-          position: { x: 0, y: 0 },
-          data: { label: "Question ID. 10", state: STATE.ACTIVE },
+          type: "treenode",
+          draggable: true,
+          connectable: true,
+          position: {
+            x: 125,
+            y: 400,
+          },
+          data: {
+            id: "10",
+            label: "10",
+            level: "Evaluate",
+            type: "True-False",
+            stem: "What is a potential vulnerability associated with symmetric encryption?",
+            options:
+              " A. The length of the key \n  B. The randomness of the key \n C. The secrecy of the key \n D. The type of encryption algorithm used",
+            answer: "C",
+            concept: "Hashing",
+          },
+          targetPosition: "top",
+          sourcePosition: "bottom",
+          selected: false,
+          positionAbsolute: {
+            x: 567,
+            y: 525.9999999999999,
+          },
+          dragging: false,
+          width: 118,
+          height: 50,
+        },
+        {
+          id: "11",
+          type: "treenode",
+          draggable: true,
+          connectable: true,
+          position: {
+            x: 500,
+            y: 200,
+          },
+          data: {
+            id: "11",
+            label: "11",
+            level: "Apply",
+            type: "True-False",
+            stem: "What is a potential vulnerability associated with symmetric encryption?",
+            options:
+              " A. The length of the key \n  B. The randomness of the key \n C. The secrecy of the key \n D. The type of encryption algorithm used",
+            answer: "C",
+            concept: "Symmetric Encryption",
+          },
+          targetPosition: "top",
+          sourcePosition: "bottom",
+          selected: false,
+          positionAbsolute: {
+            x: 858.9999999999998,
+            y: 228,
+          },
+          dragging: false,
+          width: 214,
+          height: 50,
+        },
+        {
+          id: "12",
+          type: "treenode",
+          draggable: true,
+          connectable: true,
+          position: {
+            x: 750,
+            y: 200,
+          },
+          data: {
+            id: "12",
+            label: "12",
+            level: "Analyze",
+            type: "True-False",
+            stem: "What is a potential vulnerability associated with symmetric encryption?",
+            options:
+              " A. The length of the key \n  B. The randomness of the key \n C. The secrecy of the key \n D. The type of encryption algorithm used",
+            answer: "C",
+            concept: "Symmetric Encryption",
+          },
+          targetPosition: "top",
+          sourcePosition: "bottom",
+          width: 215,
+          height: 50,
+          selected: false,
+          positionAbsolute: {
+            x: 1094.9999999999998,
+            y: 168,
+          },
+          dragging: false,
+        },
+        {
+          id: "13",
+          type: "treenode",
+          draggable: true,
+          connectable: true,
+          position: {
+            x: 1000,
+            y: 200,
+          },
+          data: {
+            id: "13",
+            label: "13",
+            level: "Apply",
+            type: "True-False",
+            stem: "What is a potential vulnerability associated with symmetric encryption?",
+            options:
+              " A. The length of the key \n  B. The randomness of the key \n C. The secrecy of the key \n D. The type of encryption algorithm used",
+            answer: "C",
+            concept: "Message Authentication Code",
+          },
+          targetPosition: "top",
+          sourcePosition: "bottom",
+          selected: false,
+          positionAbsolute: {
+            x: 33,
+            y: 170.32500000000005,
+          },
+          dragging: false,
+          width: 272,
+          height: 50,
+        },
+        {
+          id: "14",
+          type: "treenode",
+          draggable: true,
+          connectable: true,
+          position: {
+            x: 1250,
+            y: 200,
+          },
+          data: {
+            id: "14",
+            label: "14",
+            level: "Evaluate",
+            type: "True-False",
+            stem: "What is a potential vulnerability associated with symmetric encryption?",
+            options:
+              " A. The length of the key \n  B. The randomness of the key \n C. The secrecy of the key \n D. The type of encryption algorithm used",
+            answer: "C",
+            concept: "Message Authentication Code",
+          },
+          targetPosition: "top",
+          sourcePosition: "bottom",
+          width: 272,
+          height: 50,
+          selected: false,
+          positionAbsolute: {
+            x: 81,
+            y: 320,
+          },
+          dragging: false,
+        },
+        {
+          id: "15",
+          type: "treenode",
+          draggable: true,
+          connectable: true,
+          position: {
+            x: 1000,
+            y: 300,
+          },
+          data: {
+            id: "15",
+            label: "15",
+            level: "Create",
+            type: "True-False",
+            stem: "What is a potential vulnerability associated with symmetric encryption?",
+            options:
+              " A. The length of the key \n  B. The randomness of the key \n C. The secrecy of the key \n D. The type of encryption algorithm used",
+            answer: "C",
+            concept: "Message Authentication Code",
+          },
+          targetPosition: "top",
+          sourcePosition: "bottom",
+          width: 272,
+          height: 50,
+          selected: false,
+          positionAbsolute: {
+            x: 916,
+            y: 341.525,
+          },
+          dragging: false,
         },
       ],
       edges: [
-        { id: "e1-2", source: "1", target: "2" },
-        { id: "e2-3", source: "2", target: "3" },
-        { id: "e2-4", source: "2", target: "4" },
-        { id: "e1-5", source: "1", target: "5" },
-        { id: "e5-9", source: "5", target: "9" },
-        { id: "e4-6", source: "4", target: "6" },
-        { id: "e6-7", source: "6", target: "7" },
-        { id: "e6-7", source: "6", target: "8" },
-        { id: "e3-10", source: "3", target: "10" },
+        {
+          source: "1",
+          sourceHandle: null,
+          target: "3",
+          targetHandle: null,
+          id: "reactflow__edge-1-3",
+        },
+        {
+          source: "1",
+          sourceHandle: null,
+          target: "4",
+          targetHandle: null,
+          id: "reactflow__edge-1-4",
+        },
+        {
+          source: "1",
+          sourceHandle: null,
+          target: "5",
+          targetHandle: null,
+          id: "reactflow__edge-1-5",
+        },
+        {
+          source: "4",
+          sourceHandle: null,
+          target: "7",
+          targetHandle: null,
+          id: "reactflow__edge-4-7",
+        },
+        {
+          source: "4",
+          sourceHandle: null,
+          target: "6",
+          targetHandle: null,
+          id: "reactflow__edge-4-6",
+        },
+        {
+          source: "7",
+          sourceHandle: null,
+          target: "8",
+          targetHandle: null,
+          id: "reactflow__edge-7-8",
+        },
+        {
+          source: "7",
+          sourceHandle: null,
+          target: "9",
+          targetHandle: null,
+          id: "reactflow__edge-7-9",
+        },
+        {
+          source: "8",
+          sourceHandle: null,
+          target: "10",
+          targetHandle: null,
+          id: "reactflow__edge-8-10",
+        },
+        {
+          source: "5",
+          sourceHandle: null,
+          target: "11",
+          targetHandle: null,
+          id: "reactflow__edge-5-11",
+        },
+        {
+          source: "5",
+          sourceHandle: null,
+          target: "12",
+          targetHandle: null,
+          id: "reactflow__edge-5-12",
+        },
+        {
+          source: "3",
+          sourceHandle: null,
+          target: "13",
+          targetHandle: null,
+          id: "reactflow__edge-3-13",
+        },
+        {
+          source: "3",
+          sourceHandle: null,
+          target: "14",
+          targetHandle: null,
+          id: "reactflow__edge-3-14",
+        },
+        {
+          source: "13",
+          sourceHandle: null,
+          target: "15",
+          targetHandle: null,
+          id: "reactflow__edge-13-15",
+        },
       ],
+    };
+    var newNodes = sourceTree.nodes.map((node) => {
+      return {
+        id: node.data.id,
+        stem: node.data.stem,
+        options: node.data.options.split("\n"),
+        answer: node.data.answer,
+        level: node.data.level,
+        concept: node.data.concept,
+      };
     });
-    setActiveQuestion({
-      id: 10,
-      stem: "What is an example of a scenario where symmetric encryption can be used to secure communication between two parties?",
-      options: [
-        "A. Protecting data in transit between a web browser and a server",
-        "B. Securing a wireless network with a password",
-        "C. Encrypting email messages between two parties using a shared secret key",
-        "D. Using a digital signature to verify the authenticity of a message",
-      ],
-    });
-    var newMessageList = activeMessageList;
-    newMessageList.push({
-      text: "Question 3: You are wrong! Next Question: Question 10.",
-      label: "right",
-    });
-    setActiveMessageList(newMessageList);
+    console.log(newNodes);
   };
 
-  const handleSkip = () => {
-    setActiveQuestion({
-      id: 10,
-      stem: "What is an example of a scenario where symmetric encryption can be used to secure communication between two parties?",
-      options: [
-        "A. Protecting data in transit between a web browser and a server",
-        "B. Securing a wireless network with a password",
-        "C. Encrypting email messages between two parties using a shared secret key",
-        "D. Using a digital signature to verify the authenticity of a message",
-      ],
-    });
+  const getNextQuestion = () => {};
+
+  const handleSubmit = () => {
+    setActiveTree({});
+    var newActiveQuestion = getNextQuestion();
+    setActiveQuestion(newActiveQuestion);
+    setActiveMessageList([]);
   };
+
+  const handleSkip = () => {};
 
   return (
     <Box sx={{ m: 4, p: 4 }}>
@@ -263,15 +605,7 @@ export default function AnswerIndex() {
         <Grid item xs={12}>
           <TreeSelector />
         </Grid>
-        <Grid item xs={8}>
-          <TreeIndex
-            id={activeTree.id}
-            initialNodes={activeTree.nodes}
-            initialEdges={activeTree.edges}
-            nodeTypes={nodeTypes}
-          />
-        </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={12}>
           <QuestionView
             id={activeQuestion.id}
             stem={activeQuestion.stem}
@@ -279,9 +613,6 @@ export default function AnswerIndex() {
             handleSubmit={handleSubmit}
             handleSkip={handleSkip}
           />
-        </Grid>
-        <Grid item xs={12}>
-          <ConsoleIndex messageList={activeMessageList} />
         </Grid>
       </Grid>
     </Box>
