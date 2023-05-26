@@ -38,7 +38,6 @@ export default function QuestionPanel({
         maxID = parseInt(tree.nodes[index].id);
       }
     }
-    console.log(maxID);
     setID((maxID + 1).toString());
     var body = {
       concepts: questionConcepts,
@@ -46,7 +45,6 @@ export default function QuestionPanel({
       level: questionLevel,
       type: questionType,
     };
-    console.log(body);
     var newQuestionStem =
       "What is a potential vulnerability associated with symmetric encryption?";
     var newQuesrionOptions =
