@@ -2,10 +2,11 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { Button, Paper, Grid, Box, Typography } from "@mui/material";
 
+import { getNodeList, sampleTree } from "./question/Utils";
 import TreeSelector from "./tree/TreeSelector";
 import QuestionView from "./question/QuestionView";
 import CountDown from "./question/CountDown";
-import { getNodeList, sampleTree } from "./question/Utils";
+import ReportView from "./question/ReportView";
 
 export default function AnswerIndex() {
   const [activeTree, setActiveTree] = useState([]);
@@ -43,12 +44,13 @@ export default function AnswerIndex() {
           />
         );
       } else {
-        return <h1>Report</h1>;
+        return <ReportView activeTree={activeTree} answerList={answerList} />;
       }
     } else {
-      return <h1>Start</h1>;
+      return null;
     }
   };
+
   const handleStart = (event) => {
     setStart(true);
     setActiveQuestion(activeTree[0]);
@@ -103,7 +105,7 @@ export default function AnswerIndex() {
                 alignContent={"left"}
               >
                 <Typography variant="body" color="grey.500" component="div">
-                  Tree Info
+                  Info
                 </Typography>
               </Grid>
               <Grid

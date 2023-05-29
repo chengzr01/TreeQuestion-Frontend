@@ -1,7 +1,9 @@
 import * as React from "react";
 import { useState } from "react";
 // MaterialUI
-import { Box, Tabs, Tab, Typography } from "@mui/material";
+import { Box, Tabs, Tab, Typography, Button, Grid } from "@mui/material";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 // Components
 import IdeationIndex from "./ideation/IdeationIndex";
@@ -52,11 +54,55 @@ export default function CreateIndex() {
   return (
     <Box sx={{ m: 4, p: 4 }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs value={value} variant="fullWidth" onChange={handleChange}>
-          <Tab label="Ideation" {...a11yProps(0)} />
-          <Tab label="Validation" {...a11yProps(1)} />
-          <Tab label="Generation" {...a11yProps(2)} />
-        </Tabs>
+        <Grid container>
+          <Grid
+            item
+            xs={1}
+            display={"flex"}
+            alignContent={"left"}
+            justifyContent={"left"}
+          >
+            <Button
+              variant="text"
+              onClick={(event) => {
+                if (value - 1 > 0) {
+                  setValue(value - 1);
+                } else {
+                  setValue(0);
+                }
+              }}
+            >
+              <NavigateBeforeIcon />
+            </Button>
+          </Grid>
+          <Grid item xs={10}>
+            <Tabs value={value} variant="fullWidth" onChange={handleChange}>
+              <Tab label="Ideation" {...a11yProps(0)} />
+              <Tab label="Validation" {...a11yProps(1)} />
+              <Tab label="Generation" {...a11yProps(2)} />
+            </Tabs>
+          </Grid>
+          <Grid
+            item
+            xs={1}
+            display={"flex"}
+            alignContent={"right"}
+            justifyContent={"right"}
+          >
+            <Button
+              variant="text"
+              onClick={(event) => {
+                if (value + 1 < 3) {
+                  setValue(value + 1);
+                } else {
+                  setValue(2);
+                }
+              }}
+            >
+              <NavigateNextIcon />
+            </Button>
+          </Grid>
+        </Grid>
       </Box>
       <TabPanel value={value} index={0}>
         <IdeationIndex

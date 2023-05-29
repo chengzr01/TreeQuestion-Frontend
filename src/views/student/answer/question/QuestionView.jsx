@@ -25,7 +25,7 @@ export default function QuestionView({
       <Grid container spacing={2}>
         <Grid
           item
-          xs={8}
+          xs={12}
           display={"flex"}
           justifyContent={"left"}
           alignContent={"left"}
