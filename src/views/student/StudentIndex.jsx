@@ -22,36 +22,19 @@ export default function StudentIndex() {
         <Grid container spacing={2} sx={{ mt: 2, mb: 2 }}>
           <Grid
             item
-            xs={6}
+            xs={12}
             display="flex"
-            justifyContent="right"
-            alignItems="right"
+            justifyContent="center"
+            alignItems="center"
           >
             <Button
               variant="outlined"
-              sx={{ width: "40%" }}
+              sx={{ width: "20%" }}
               onClick={() => {
                 navigate("answer");
               }}
             >
               <Typography variant="h6"> 🌴 Answer New Trees </Typography>
-            </Button>
-          </Grid>
-          <Grid
-            item
-            xs={6}
-            display="flex"
-            justifyContent="left"
-            alignItems="left"
-          >
-            <Button
-              variant="outlined"
-              sx={{ width: "40%" }}
-              onClick={() => {
-                navigate("review");
-              }}
-            >
-              <Typography variant="h6"> 🎄 Review Historical Trees</Typography>
             </Button>
           </Grid>
         </Grid>

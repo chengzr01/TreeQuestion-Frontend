@@ -1,15 +1,12 @@
 import * as React from "react";
 import { useState } from "react";
-import AppBar from "@mui/material/AppBar";
-import LogoutIcon from "@mui/icons-material/Logout";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
 import { useNavigate } from "react-router-dom";
+
+import { AppBar, Toolbar, Typography, Grid } from "@mui/material";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 export default function TreeBar({ identity }) {
   let navigate = useNavigate();
-  const [user, setUser] = useState("Zirui Cheng");
 
   const getIdentityDisplay = () => {
     if (identity === "teacher")
@@ -29,7 +26,6 @@ export default function TreeBar({ identity }) {
 
   const handleSignOut = (event) => {
     event.preventDefault();
-    setUser("");
     navigate("/signin");
   };
 
@@ -45,7 +41,7 @@ export default function TreeBar({ identity }) {
             alignItems="left"
           >
             <Typography variant="h6" color="inherit" noWrap>
-              Welcome, {user}!
+              Welcome to TreeQuestion!
             </Typography>
           </Grid>
           <Grid

@@ -1,15 +1,63 @@
 import * as React from "react";
-import { useState } from "react";
-import Card from "@mui/material/Card";
-import { Typography } from "@mui/material";
+import { useState, useEffect } from "react";
+import { Typography, Card } from "@mui/material";
 import palette from "../../../../theme/palette";
 
-export default function OptionCard({ option, choice, setChoice }) {
-  const [selected, setSelected] = useState(false);
-  const getTextColor = () => {
-    if (selected) return palette.primary.main;
-    else return palette.common.black;
+export default function OptionCard({
+  questionIndex,
+  option,
+  optionIndex,
+  answerList,
+  setAnswerList,
+}) {
+  const [optionColor, setOptionColor] = useState(palette.common.black);
+  const handleClick = () => {
+    var newAnswerList = answerList;
+    for (var answerListIndex in newAnswerList) {
+      if (newAnswerList[answerListIndex].id === questionIndex) {
+        for (var optionIndex in newAnswerList[answerListIndex].options) {
+          if (
+            newAnswerList[answerListIndex].options[optionIndex].option ===
+            option
+          ) {
+            if (newAnswerList[answerListIndex].options[optionIndex].result) {
+              setOptionColor(palette.common.black);
+            } else {
+              setOptionColor(palette.primary.main);
+            }
+            newAnswerList[answerListIndex].options[optionIndex].result =
+              !newAnswerList[answerListIndex].options[optionIndex].result;
+            break;
+          }
+        }
+        break;
+      }
+    }
+    setAnswerList(newAnswerList);
   };
+
+  useEffect(() => {
+    var newAnswerList = answerList;
+    for (var answerListIndex in newAnswerList) {
+      if (newAnswerList[answerListIndex].id === questionIndex) {
+        for (var optionIndex in newAnswerList[answerListIndex].options) {
+          if (
+            newAnswerList[answerListIndex].options[optionIndex].option ===
+            option
+          ) {
+            if (!newAnswerList[answerListIndex].options[optionIndex].result) {
+              setOptionColor(palette.common.black);
+            } else {
+              setOptionColor(palette.primary.main);
+            }
+            break;
+          }
+        }
+        break;
+      }
+    }
+  }, [answerList, option, questionIndex]);
+
   return (
     <Card
       sx={{
@@ -17,22 +65,15 @@ export default function OptionCard({ option, choice, setChoice }) {
         mt: 1,
         mb: 1,
         "&:hover": {
-          backgroundColor: "grey.200",
+          backgroundColor: palette.grey[300],
           opacity: [0.75, 0.75, 0.75],
         },
       }}
       onClick={() => {
-        var newChoice = choice;
-        for (var id in newChoice) {
-          if (newChoice[id].choice === option) {
-            newChoice[id].result = !selected;
-          }
-        }
-        setChoice(newChoice);
-        setSelected(!selected);
+        handleClick();
       }}
     >
-      <Typography variant="body" color={getTextColor()}>
+      <Typography variant="body" color={optionColor}>
         {option}
       </Typography>
     </Card>
