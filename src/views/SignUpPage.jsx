@@ -1,29 +1,96 @@
 import * as React from "react";
 import { useState } from "react";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
+import axios from "axios";
+import {
+  Button,
+  CssBaseline,
+  TextField,
+  Link,
+  Paper,
+  Box,
+  Grid,
+  Slide,
+  Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
 import RoleMenu from "../components/RoleMenu";
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+function AlertDialogSlide({ content, open, setOpen }) {
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <div>
+      <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClose}
+        aria-describedby="alert-dialog-slide-description"
+        fullWidth={true}
+        maxWidth={"xs"}
+      >
+        <DialogContent>
+          <DialogTitle>{content}</DialogTitle>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>OK</Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+}
+
 export default function SignUpPage() {
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
   const [role, setRole] = useState("student");
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogContent, setDialogContent] = useState("");
+
+  const handleNameChange = (event) => {
+    setName(event.target.value);
+  };
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    var body = { name: name, password: password, role: role };
+    axios
+      .post("/user/sign_up", body)
+      .then((res) => {
+        if (res.data.code === 200) {
+          setDialogOpen(true);
+          setDialogContent("Succeed");
+        } else {
+          setDialogOpen(true);
+          setDialogContent("Fail");
+        }
+      })
+      .catch((err) => {
+        setDialogOpen(true);
+        setDialogContent("Fail");
+      });
   };
 
   return (
     <Box>
+      <AlertDialogSlide
+        content={dialogContent}
+        open={dialogOpen}
+        setOpen={setDialogOpen}
+      />
       <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
         <Grid
@@ -64,11 +131,14 @@ export default function SignUpPage() {
                 margin="normal"
                 required
                 fullWidth
-                id="user"
-                label="User"
-                name="user"
-                autoComplete="user"
+                id="name"
+                label="Name"
+                name="name"
+                autoComplete="name"
                 autoFocus
+                onChange={(event) => {
+                  handleNameChange(event);
+                }}
               />
               <TextField
                 margin="normal"
@@ -79,6 +149,9 @@ export default function SignUpPage() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={(event) => {
+                  handlePasswordChange(event);
+                }}
               />
 
               <Grid container spacing={2} sx={{ mt: 1, mb: 1 }}>
@@ -91,7 +164,7 @@ export default function SignUpPage() {
                     fullWidth
                     variant="contained"
                     onClick={(event) => {
-                      handleSubmit();
+                      handleSubmit(event);
                     }}
                   >
                     Sign Up

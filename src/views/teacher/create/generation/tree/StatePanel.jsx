@@ -27,12 +27,12 @@ export default function StatePanel({
     return { concept: cpt, weight: 1 };
   });
   const levelWeights = [
-    { level: "Remember", weight: 1 },
-    { level: "Understand", weight: 2 },
-    { level: "Apply", weight: 3 },
-    { level: "Analyze", weight: 4 },
-    { level: "Evaluate", weight: 5 },
-    { level: "Create", weight: 6 },
+    { level: "Remember", weight: 4 },
+    { level: "Understand", weight: 8 },
+    { level: "Apply", weight: 12 },
+    { level: "Analyze", weight: 16 },
+    { level: "Evaluate", weight: 16 },
+    { level: "Create", weight: 12 },
   ];
 
   const getLevelCount = () => {
@@ -352,7 +352,7 @@ export default function StatePanel({
   };
 
   const getNodeValue = (node) => {
-    const lambda = 100;
+    const lambda = 80;
     var globalValue = getGlobalNodeValue(node);
     var localValue = getLocalNodeValue(node);
     var totalValue = -1 * globalValue + lambda * localValue;
