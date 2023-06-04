@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
 import axios from "axios";
+import cookie from "react-cookies";
 import {
   Button,
   CssBaseline,
@@ -77,6 +78,12 @@ export default function SignInPage() {
           setDialogContent("Succeed");
           if (role === "student") navigate("/student");
           else navigate("/teacher");
+          let cookieSetup = {
+            path: "/",
+            domain: window.location.hostname,
+          };
+          cookie.save("name", name, cookieSetup);
+          cookie.save("role", role, cookieSetup);
         } else {
           setDialogOpen(true);
           setDialogContent("Fail");

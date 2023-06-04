@@ -22,6 +22,8 @@ export default function StatementTable({
   setKeyCandidates,
   distractorCandidates,
   setDistractorCandidates,
+  candidateUpdate,
+  setCandidateUpdate,
 }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -70,6 +72,8 @@ export default function StatementTable({
                     setKeyCandidates={setKeyCandidates}
                     distractorCandidates={distractorCandidates}
                     setDistractorCandidates={setDistractorCandidates}
+                    candidateUpdate={candidateUpdate}
+                    setCandidateUpdate={setCandidateUpdate}
                   ></StatementRow>
                 );
               })}

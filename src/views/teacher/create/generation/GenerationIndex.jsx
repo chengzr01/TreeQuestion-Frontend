@@ -23,6 +23,7 @@ export default function GenerationIndex({
   const [tree, setTree] = useState({ nodes: [], edges: [] });
   const [keyCandidates, setKeyCandidates] = useState([]);
   const [distractorCandidates, setDistractorCandidates] = useState([]);
+  const [candidateUpdate, setCandidateUpdate] = useState(true);
   const [update, setUpdate] = useState(true);
   const [edited, setEdited] = useState(false);
   return (
@@ -36,6 +37,8 @@ export default function GenerationIndex({
             setKeyCandidates={setKeyCandidates}
             distractorCandidates={distractorCandidates}
             setDistractorCandidates={setDistractorCandidates}
+            candidateUpdate={candidateUpdate}
+            setCandidateUpdate={setCandidateUpdate}
           />
         </Grid>
         <Grid item xs={4}>
@@ -52,6 +55,8 @@ export default function GenerationIndex({
             setKeyCandidates={setKeyCandidates}
             distractorCandidates={distractorCandidates}
             setDistractorCandidates={setDistractorCandidates}
+            candidateUpdate={candidateUpdate}
+            setCandidateUpdate={setCandidateUpdate}
             edited={edited}
             setEdited={setEdited}
           />
@@ -73,9 +78,6 @@ export default function GenerationIndex({
             concepts={concepts}
             field={field}
           />
-        </Grid>
-        <Grid item xs={12}>
-          <IssuePanel />
         </Grid>
       </Grid>
     </Box>

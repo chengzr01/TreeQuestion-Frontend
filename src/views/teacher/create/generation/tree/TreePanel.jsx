@@ -1,7 +1,5 @@
 import * as React from "react";
 import { useCallback, useState, useEffect } from "react";
-import cookie from "react-cookies";
-
 import { Card, Grid, Tooltip } from "@mui/material";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import SaveIcon from "@mui/icons-material/Save";
@@ -63,11 +61,6 @@ export default function TreePanel({ tree, setTree, update, setUpdate }) {
 
   const onSave = useCallback(() => {
     setTree({ nodes: nodes, edges: edges });
-    let cookieSetup = {
-      path: "/",
-      domain: window.location.hostname,
-    };
-    cookie.save("tree", { nodes: nodes, edges: edges }, cookieSetup);
   }, [nodes, edges, setTree]);
 
   const onNodesChange = useCallback(

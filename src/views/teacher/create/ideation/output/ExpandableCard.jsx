@@ -29,10 +29,27 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-export default function ExpandableCard({ title, subheader, content }) {
+export default function ExpandableCard({
+  title,
+  subheader,
+  content,
+  index,
+  selectedKnowledge,
+  setSelectedKnowledge,
+}) {
   const [expanded, setExpanded] = useState(false);
   const handleCheckBoxChange = (event) => {
-    console.log(event.target.checked);
+    var newSelectedKnowledge = selectedKnowledge;
+    if (event.target.checked) {
+      if (newSelectedKnowledge.indexOf(index) < 0) {
+        newSelectedKnowledge.push(index);
+      }
+    } else {
+      if (newSelectedKnowledge.indexOf(index) >= 0) {
+        newSelectedKnowledge.splice(newSelectedKnowledge.indexOf(index), 1);
+      }
+    }
+    setSelectedKnowledge(newSelectedKnowledge);
   };
 
   const handleExpandClick = () => {
@@ -71,7 +88,6 @@ export default function ExpandableCard({ title, subheader, content }) {
       <CardActions disableSpacing>
         <Checkbox
           {...label}
-          defaultChecked
           onChange={handleCheckBoxChange}
           sx={{ color: palette.primary.main }}
         />

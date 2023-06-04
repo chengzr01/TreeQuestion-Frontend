@@ -17,29 +17,49 @@ export default function IdeationInput({
   setConcepts,
   field,
   setField,
+  knowledgeList,
+  setKnowledgeList,
 }) {
   const [levels, setLevels] = useState([]);
+  const [currentConcepts, setCurrentConcepts] = useState([]);
+  const [currentField, setCurrentField] = useState("");
 
   const handleInputChange = (event) => {
     event.preventDefault();
     if (event.target.name === "concepts")
-      setConcepts(event.target.value.split("/"));
-    if (event.target.name === "field") setField(event.target.value);
+      setCurrentConcepts(event.target.value.split("/"));
+    if (event.target.name === "field") setCurrentField(event.target.value);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    for (var conceptIndex in concepts) {
+    for (var conceptIndex in currentConcepts) {
       for (var levelIndex in levels) {
         var body = {
-          field: field,
-          concept: concepts[conceptIndex],
+          field: currentField,
+          concept: currentConcepts[conceptIndex],
           level: levels[levelIndex],
         };
-        console.log(body);
-        axios.post("/knowledge/create_ideation/", body).then((res) => {
-          console.log(res);
+        axios.post("/tree/create_knowledge_component", body).then((res) => {
+          var newKnowledgeList = knowledgeList;
+          newKnowledgeList.push({
+            field: currentField,
+            concept: currentConcepts[conceptIndex],
+            level: levels[levelIndex],
+            content: res.data.data.knowledge,
+          });
+          setKnowledgeList(newKnowledgeList);
           setUpdate(false);
+          var newConcepts = concepts;
+          for (var currentConceptsIndex in currentConcepts) {
+            if (
+              newConcepts.indexOf(currentConcepts[currentConceptsIndex]) < 0
+            ) {
+              newConcepts.push(currentConcepts[currentConceptsIndex]);
+            }
+          }
+          setConcepts(newConcepts);
+          setField(currentField);
         });
       }
     }

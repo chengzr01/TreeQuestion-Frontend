@@ -5,7 +5,10 @@ module.exports = function (app) {
     createProxyMiddleware("/user", {
       target: "http://127.0.0.1:8000",
       changeOrigin: true,
-      pathRewrite: { "^/user": "/user" },
+    }),
+    createProxyMiddleware("/tree", {
+      target: "http://127.0.0.1:8000",
+      changeOrigin: true,
     })
   );
 };

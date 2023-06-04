@@ -1,6 +1,6 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
-
+import { useState } from "react";
+import axios from "axios";
 import {
   Box,
   Grid,
@@ -10,71 +10,16 @@ import {
   IconButton,
   Typography,
   Tooltip,
-  Card,
+  Button,
+  alpha,
 } from "@mui/material";
-import { alpha } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import PublishedWithChangesOutlinedIcon from "@mui/icons-material/PublishedWithChangesOutlined";
 
+import StatementCard from "./StatementCard";
 import HeuristicsSelector from "./HeuristicsSelector";
 import palette from "../../../../../theme/palette";
-
-function StatementCard({
-  statement,
-  type,
-  keyCandidates,
-  setKeyCandidates,
-  distractorCandidates,
-  setDistractorCandidates,
-}) {
-  const [color, setColor] = useState("black");
-  const handleClick = () => {
-    var newKeyCandidates = keyCandidates;
-    var newDistractorCandidates = distractorCandidates;
-
-    if (type === "key") {
-      if (keyCandidates.indexOf(statement) >= 0) {
-        newKeyCandidates.splice(keyCandidates.indexOf(statement), 1);
-        setKeyCandidates(newKeyCandidates);
-        setColor("black");
-      } else {
-        newKeyCandidates.push(statement);
-        setKeyCandidates(newKeyCandidates);
-        setColor(palette.primary.main);
-      }
-    } else {
-      if (distractorCandidates.indexOf(statement) >= 0) {
-        newDistractorCandidates.splice(
-          distractorCandidates.indexOf(statement),
-          1
-        );
-        setDistractorCandidates(newDistractorCandidates);
-        setColor("black");
-      } else {
-        newDistractorCandidates.push(statement);
-        setDistractorCandidates(newDistractorCandidates);
-        setColor(palette.error.main);
-      }
-    }
-  };
-
-  return (
-    <Card
-      sx={{
-        mt: 1,
-        mb: 1,
-        p: 2,
-        "&:hover": {
-          backgroundColor: `${alpha(palette.primary.main, 0.2)}`,
-        },
-      }}
-      onClick={handleClick}
-    >
-      <Typography color={color}>{statement}</Typography>
-    </Card>
-  );
-}
 
 export default function StatementRow({
   row,
@@ -82,41 +27,49 @@ export default function StatementRow({
   setKeyCandidates,
   distractorCandidates,
   setDistractorCandidates,
+  candidateUpdate,
+  setCandidateUpdate,
 }) {
   const [open, setOpen] = useState(false);
   const [keyStatement, setKeyStatement] = useState("");
-  const [keyStatementLoad, setKeyStatementLoad] = useState(false);
   const [distractorStatements, setDistractorStatements] = useState([]);
   const [heuristicValueList, setHeuristicValueList] = useState([]);
 
   const getDistractingStatment = (event) => {
     for (var index in heuristicValueList) {
-      var newStatement =
-        row.source +
-        " " +
-        row.label +
-        " " +
-        row.target +
-        " " +
-        heuristicValueList[index].content +
-        " " +
-        heuristicValueList[index].level;
-      var newStatementList = distractorStatements;
-      newStatementList.push(newStatement);
-      setDistractorStatements(newStatementList);
+      var body = {
+        source: row.source,
+        label: row.label,
+        target: row.target,
+        template: heuristicValueList[index].content,
+      };
+      axios
+        .post("/tree/create_distractor_statement", body)
+        .then((res) => {
+          var newStatementList = distractorStatements;
+          res.data.data.distractors.forEach((element) => {
+            newStatementList.push(element);
+          });
+          setDistractorStatements(newStatementList);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
     return;
   };
 
   const getKeyStatement = () => {
-    setKeyStatement(row.source + " " + row.label + " " + row.target);
+    var body = { source: row.source, target: row.target, label: row.label };
+    axios
+      .post("/tree/create_key_statement", body)
+      .then((res) => {
+        setKeyStatement(res.data.data.key);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
-
-  useEffect(() => {
-    if (!keyStatementLoad) {
-      getKeyStatement();
-    }
-  });
 
   return (
     <React.Fragment>
@@ -144,7 +97,7 @@ export default function StatementRow({
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ pt: 1, pb: 1 }}>
               <Grid container spacing={2}>
-                <Grid item xs={12}>
+                <Grid item xs={10}>
                   <Typography
                     sx={{ fontSize: 14, pt: 1 }}
                     color="text.secondary"
@@ -152,6 +105,24 @@ export default function StatementRow({
                   >
                     <i>Import as Keys</i>
                   </Typography>
+                </Grid>
+                <Grid
+                  item
+                  xs={2}
+                  display="flex"
+                  justifyContent="right"
+                  alignContent="right"
+                >
+                  <Tooltip title="Generate">
+                    <Button>
+                      <PublishedWithChangesOutlinedIcon
+                        sx={{ m: 1 }}
+                        onClick={(event) => {
+                          getKeyStatement(event);
+                        }}
+                      />
+                    </Button>
+                  </Tooltip>
                 </Grid>
                 <Grid item xs={12}>
                   <StatementCard
@@ -161,9 +132,11 @@ export default function StatementRow({
                     setKeyCandidates={setKeyCandidates}
                     distractorCandidates={distractorCandidates}
                     setDistractorCandidates={setDistractorCandidates}
+                    candidateUpdate={candidateUpdate}
+                    setCandidateUpdate={setCandidateUpdate}
                   ></StatementCard>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={10}>
                   <Typography
                     sx={{ fontSize: 14, pt: 1 }}
                     color="text.secondary"
@@ -174,7 +147,25 @@ export default function StatementRow({
                 </Grid>
                 <Grid
                   item
-                  xs={10}
+                  xs={2}
+                  display="flex"
+                  justifyContent="right"
+                  alignContent="right"
+                >
+                  <Tooltip title="Generate">
+                    <Button>
+                      <PublishedWithChangesOutlinedIcon
+                        sx={{ m: 1 }}
+                        onClick={(event) => {
+                          getDistractingStatment(event);
+                        }}
+                      />
+                    </Button>
+                  </Tooltip>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
                   display="flex"
                   justifyContent="center"
                   alignContent="center"
@@ -184,22 +175,7 @@ export default function StatementRow({
                     setHeuristicValue={setHeuristicValueList}
                   />
                 </Grid>
-                <Grid
-                  item
-                  xs={2}
-                  display="flex"
-                  justifyContent="left"
-                  alignContent="left"
-                >
-                  <Tooltip title="Generate">
-                    <PublishedWithChangesOutlinedIcon
-                      sx={{ m: 1 }}
-                      onClick={(event) => {
-                        getDistractingStatment(event);
-                      }}
-                    />
-                  </Tooltip>
-                </Grid>
+
                 <Grid item xs={12}>
                   {distractorStatements.map((distractor) => {
                     return (
@@ -210,6 +186,8 @@ export default function StatementRow({
                         setKeyCandidates={setKeyCandidates}
                         distractorCandidates={distractorCandidates}
                         setDistractorCandidates={setDistractorCandidates}
+                        candidateUpdate={candidateUpdate}
+                        setCandidateUpdate={setCandidateUpdate}
                       ></StatementCard>
                     );
                   })}

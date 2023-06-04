@@ -1,7 +1,20 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-
-import { Card, Box, Grid, Typography, Slider } from "@mui/material";
+import cookie from "react-cookies";
+import axios from "axios";
+import {
+  Card,
+  Box,
+  Grid,
+  Typography,
+  Slider,
+  Divider,
+  styled,
+  Button,
+  Tooltip,
+  Chip,
+} from "@mui/material";
+import UploadIcon from "@mui/icons-material/Upload";
 
 const levels = [
   "Remember",
@@ -11,6 +24,14 @@ const levels = [
   "Evaluate",
   "Create",
 ];
+
+const Root = styled("div")(({ theme }) => ({
+  width: "100%",
+  ...theme.typography.body2,
+  "& > :not(style) + :not(style)": {
+    marginTop: theme.spacing(2),
+  },
+}));
 
 export default function StatePanel({
   tree,
@@ -34,6 +55,26 @@ export default function StatePanel({
     { level: "Evaluate", weight: 16 },
     { level: "Create", weight: 12 },
   ];
+
+  const handleUpload = (event) => {
+    event.preventDefault();
+    var body = {
+      // name: cookie.load("name"),
+      // role: cookie.load("role"),
+      name: "zirui",
+      role: "teacher",
+      description: tree,
+    };
+    axios
+      .post("/tree/create_tree", body)
+      .then((res) => {
+        console.log(body);
+        console.log(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const getLevelCount = () => {
     var levelCount = [
@@ -356,7 +397,6 @@ export default function StatePanel({
     var globalValue = getGlobalNodeValue(node);
     var localValue = getLocalNodeValue(node);
     var totalValue = -1 * globalValue + lambda * localValue;
-    // console.log(node.concept, node.level, totalValue, globalValue, localValue);
     return totalValue;
   };
 
@@ -394,7 +434,11 @@ export default function StatePanel({
 
   return (
     <Card sx={{ m: 4, p: 4, height: "80vh" }}>
-      <Typography variant="h5"> 🗒 Expectations</Typography>
+      <Root>
+        <Divider sx={{ mt: 1, mb: 1 }}>
+          <Chip label="Expectations" />
+        </Divider>
+      </Root>
       <Box sx={{ pt: 2, pb: 2 }}>
         <Grid container spacing={2}>
           <Grid
@@ -467,7 +511,11 @@ export default function StatePanel({
           </Grid>
         </Grid>
       </Box>
-      <Typography variant="h5"> 💡 Suggestions</Typography>
+      <Root>
+        <Divider sx={{ mt: 1, mb: 1 }}>
+          <Chip label="Suggestions" />
+        </Divider>
+      </Root>
       <Box sx={{ pt: 2, pb: 2 }}>
         {suggestionList.map((suggestion) => {
           return (
@@ -477,6 +525,30 @@ export default function StatePanel({
           );
         })}
       </Box>
+      <Root>
+        <Divider sx={{ mt: 1, mb: 1 }}>
+          <Chip label="Operations" />
+        </Divider>
+      </Root>
+      <Grid container spacing={2}>
+        <Grid
+          item
+          xs={12}
+          display={"flex"}
+          alignContent={"center"}
+          justifyContent={"center"}
+        >
+          <Tooltip title="Upload">
+            <Button>
+              <UploadIcon
+                onClick={(event) => {
+                  handleUpload(event);
+                }}
+              />
+            </Button>
+          </Tooltip>
+        </Grid>
+      </Grid>
     </Card>
   );
 }

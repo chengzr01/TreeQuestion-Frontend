@@ -39,13 +39,11 @@ function a11yProps(index) {
 
 export default function CreateIndex() {
   const [value, setValue] = useState(0);
-  const [concepts, setConcepts] = useState([
-    "Hashing",
-    "Symmetric Encryption",
-    "Message Authentication Code",
-  ]);
+  const [concepts, setConcepts] = useState([]);
   const [field, setField] = useState("");
+  const [sourceGraph, setSourceGraph] = useState([]);
   const [graph, setGraph] = useState({ nodes: [], edges: [] });
+  const [knowledgeList, setKnowledgeList] = useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -112,6 +110,10 @@ export default function CreateIndex() {
           setConcepts={setConcepts}
           field={field}
           setField={setField}
+          knowledgeList={knowledgeList}
+          setKnowledgeList={setKnowledgeList}
+          sourceGraph={sourceGraph}
+          setSourceGraph={setSourceGraph}
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
@@ -120,6 +122,8 @@ export default function CreateIndex() {
           setValue={setValue}
           graph={graph}
           setGraph={setGraph}
+          sourceGraph={sourceGraph}
+          setSourceGraph={setSourceGraph}
         />
       </TabPanel>
       <TabPanel value={value} index={2}>

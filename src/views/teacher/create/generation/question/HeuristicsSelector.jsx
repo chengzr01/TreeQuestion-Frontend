@@ -16,7 +16,8 @@ export default function HeuristicsSelector({
         setHeuristicValue(newHeuristicValue);
       }}
       getOptionLabel={(option) => {
-        return "(" + option.index + ")" + " " + option.content;
+        var display = "(" + option.index + ")" + " " + option.content;
+        return display;
       }}
       defaultValue={[]}
       filterSelectedOptions

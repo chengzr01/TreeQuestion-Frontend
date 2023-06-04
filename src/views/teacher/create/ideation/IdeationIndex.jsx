@@ -12,6 +12,10 @@ export default function IdeationIndex({
   setConcepts,
   field,
   setField,
+  knowledgeList,
+  setKnowledgeList,
+  sourceGraph,
+  setSourceGraph,
 }) {
   const [update, setUpdate] = useState(false);
 
@@ -24,8 +28,23 @@ export default function IdeationIndex({
         setConcepts={setConcepts}
         field={field}
         setField={setField}
+        knowledgeList={knowledgeList}
+        setKnowledgeList={setKnowledgeList}
       />
-      <IdeationOutput setValue={setValue} />
+      <IdeationOutput
+        value={value}
+        setValue={setValue}
+        update={update}
+        setUpdate={setUpdate}
+        concepts={concepts}
+        setConcepts={setConcepts}
+        field={field}
+        setField={setField}
+        knowledgeList={knowledgeList}
+        setKnowledgeList={setKnowledgeList}
+        sourceGraph={sourceGraph}
+        setSourceGraph={setSourceGraph}
+      />
     </Box>
   );
 }

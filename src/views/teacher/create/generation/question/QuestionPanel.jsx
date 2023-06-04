@@ -1,15 +1,31 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-import { Card, Grid } from "@mui/material";
-import { Typography } from "@mui/material";
+import {
+  Button,
+  Card,
+  Grid,
+  Typography,
+  TextField,
+  Autocomplete,
+  Tooltip,
+  Divider,
+  styled,
+  Chip,
+} from "@mui/material";
 
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-import PublishedWithChangesOutlinedIcon from "@mui/icons-material/PublishedWithChangesOutlined";
-import Tooltip from "@mui/material/Tooltip";
 import AddIcon from "@mui/icons-material/Add";
-import BackspaceIcon from "@mui/icons-material/Backspace";
+import BackspaceIconOutlined from "@mui/icons-material/BackspaceOutlined";
+import PublishedWithChangesOutlinedIcon from "@mui/icons-material/PublishedWithChangesOutlined";
+import axios from "axios";
+
+const Root = styled("div")(({ theme }) => ({
+  width: "100%",
+  ...theme.typography.body2,
+  "& > :not(style) + :not(style)": {
+    marginTop: theme.spacing(2),
+  },
+}));
 
 export default function QuestionPanel({
   concepts,
@@ -20,6 +36,12 @@ export default function QuestionPanel({
   setTree,
   update,
   setUpdate,
+  keyCandidates,
+  setKeyCandidates,
+  distractorCandidates,
+  setDistractorCandidates,
+  candidateUpdate,
+  setCandidateUpdate,
   edited,
   setEdited,
 }) {
@@ -28,7 +50,7 @@ export default function QuestionPanel({
   const [questionLevel, setQuestionLevel] = useState("");
   const [questionType, setQuestionType] = useState("Multi-Choice");
   const [questionStem, setQuestionStem] = useState("");
-  const [questionOptions, setQuestionOptions] = useState("");
+  const [questionOptions, setQuestionOptions] = useState([]);
   const [questionAnswer, setQuestionAnswer] = useState("");
 
   const getQuestion = (event) => {
@@ -40,19 +62,24 @@ export default function QuestionPanel({
     }
     setID((maxID + 1).toString());
     var body = {
-      concepts: questionConcepts,
+      concept: questionConcepts,
       field: field,
       level: questionLevel,
       type: questionType,
+      keys: keyCandidates,
+      distractors: distractorCandidates,
     };
-    var newQuestionStem =
-      "What is a potential vulnerability associated with symmetric encryption?";
-    var newQuesrionOptions =
-      " A. The length of the key \n  B. The randomness of the key \n C. The secrecy of the key \n D. The type of encryption algorithm used";
-    var newQuestionAnswer = "C";
-    setQuestionStem(newQuestionStem);
-    setQuestionOptions(newQuesrionOptions);
-    setQuestionAnswer(newQuestionAnswer);
+    axios
+      .post("/tree/create_question", body)
+      .then((res) => {
+        console.log(res.data.data);
+        setQuestionStem(res.data.data.stem);
+        setQuestionOptions(res.data.data.options);
+        setQuestionAnswer(res.data.data.answer);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleAdd = () => {
@@ -83,23 +110,47 @@ export default function QuestionPanel({
   const handleClear = () => {
     setID("");
     setQuestionStem("");
-    setQuestionOptions("");
+    setQuestionOptions([]);
     setQuestionAnswer("");
   };
 
+  useEffect(() => {
+    if (!candidateUpdate) {
+      setCandidateUpdate(true);
+    }
+  });
   return (
     <Card sx={{ m: 4, p: 4 }}>
       <Grid container spacing={2}>
-        <Grid
-          item
-          xs={12}
-          display="flex"
-          alignContent="left"
-          justifyContent="left"
-        >
-          <Typography variant="h5"> 🔍 Questions</Typography>
-        </Grid>
-
+        <Root>
+          <Divider sx={{ mt: 1, mb: 1 }}>
+            <Chip label="Keys" />
+          </Divider>
+        </Root>
+        {keyCandidates.map((key) => {
+          return (
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              <i>{key}</i>
+            </Typography>
+          );
+        })}
+        <Root>
+          <Divider sx={{ mt: 1, mb: 1 }}>
+            <Chip label="Distractors" />
+          </Divider>
+        </Root>
+        {distractorCandidates.map((distractor) => {
+          return (
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              <i> {distractor}</i>
+            </Typography>
+          );
+        })}
+        <Root>
+          <Divider sx={{ mt: 1, mb: 1 }}>
+            <Chip label="Questions" />
+          </Divider>
+        </Root>
         <Grid item xs={12}>
           <Autocomplete
             size="small"
@@ -112,7 +163,7 @@ export default function QuestionPanel({
             renderInput={(params) => <TextField {...params} label="Concepts" />}
           />
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={6}>
           <Autocomplete
             size="small"
             disablePortal
@@ -131,7 +182,7 @@ export default function QuestionPanel({
             renderInput={(params) => <TextField {...params} label="Level" />}
           />
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={6}>
           <Autocomplete
             size="small"
             disablePortal
@@ -142,22 +193,6 @@ export default function QuestionPanel({
             }}
             renderInput={(params) => <TextField {...params} label="Type" />}
           />
-        </Grid>
-        <Grid
-          item
-          xs={2}
-          display="flex"
-          alignContent="center"
-          justifyContent="center"
-        >
-          <Tooltip title="Confirm">
-            <PublishedWithChangesOutlinedIcon
-              sx={{ m: 1 }}
-              onClick={(event) => {
-                getQuestion(event);
-              }}
-            />
-          </Tooltip>
         </Grid>
         <Grid item xs={2}>
           <Typography
@@ -202,7 +237,9 @@ export default function QuestionPanel({
           </Typography>
         </Grid>
         <Grid item xs={10}>
-          {questionOptions}
+          {questionOptions.map((option) => (
+            <Typography>{option}</Typography>
+          ))}
         </Grid>
         <Grid item xs={2}>
           <Typography
@@ -221,24 +258,37 @@ export default function QuestionPanel({
         </Grid>
         <Grid
           item
-          xs={6}
+          xs={12}
           display="flex"
           justifyContent="center"
           alignContent="center"
         >
-          <Tooltip title="Add">
-            <AddIcon onClick={handleAdd} />
+          <Tooltip title="Generate">
+            <Button>
+              <PublishedWithChangesOutlinedIcon
+                onClick={(event) => {
+                  getQuestion(event);
+                }}
+              />
+            </Button>
           </Tooltip>
-        </Grid>
-        <Grid
-          item
-          xs={6}
-          display="flex"
-          justifyContent="center"
-          alignContent="center"
-        >
+          <Tooltip title="Add">
+            <Button>
+              <AddIcon
+                onClick={(event) => {
+                  handleAdd(event);
+                }}
+              />
+            </Button>
+          </Tooltip>
           <Tooltip title="Clear">
-            <BackspaceIcon onClick={handleClear} />
+            <Button>
+              <BackspaceIconOutlined
+                onClick={(event) => {
+                  handleClear(event);
+                }}
+              />
+            </Button>
           </Tooltip>
         </Grid>
       </Grid>

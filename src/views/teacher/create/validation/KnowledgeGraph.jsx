@@ -14,7 +14,6 @@ import ReactFlow, {
 } from "reactflow";
 import "reactflow/dist/style.css";
 
-import axios from "axios";
 import dagre from "dagre";
 
 import { Grid, Tooltip } from "@mui/material";
@@ -56,7 +55,7 @@ const getLayoutedElements = (nodes, edges, direction = "RL") => {
 const nodeTypes = { editable: EditableNode };
 const edgeTypes = { editable: EditableEdge };
 
-function AddNodeOnEdgeDrop({ graph, setGraph }) {
+function AddNodeOnEdgeDrop({ graph, setGraph, sourceGraph, setSourceGraph }) {
   const { project } = useReactFlow();
   const reactFlowWrapper = useRef(null);
   const connectingNodeId = useRef(null);
@@ -94,65 +93,63 @@ function AddNodeOnEdgeDrop({ graph, setGraph }) {
 
   const getGraphState = () => {
     setGraphLoad(true);
-    axios.get("/knowledge/read_graph_all/").then((res) => {
-      var newNodesSet = [];
-      var newEdgesSet = [];
-      for (var edgeIndex in res.data.data) {
-        newEdgesSet.push({
-          from: res.data.data[edgeIndex].source,
-          to: res.data.data[edgeIndex].target,
-          label: res.data.data[edgeIndex].relation,
-        });
-        newNodesSet.push(res.data.data[edgeIndex].source);
-        newNodesSet.push(res.data.data[edgeIndex].target);
-      }
-      var newNodesArray = Array.from(new Set(newNodesSet));
-      var newEdgesArray = Array.from(new Set(newEdgesSet));
-      var newNodes = newNodesArray.map((node) => {
-        return {
-          id: newNodesArray.indexOf(node).toString(),
-          type: "editable",
-          draggable: true,
-          connectable: true,
-          position: { x: 0, y: 0 },
-          data: { label: node, update: updateNode },
-        };
+    var newNodesSet = [];
+    var newEdgesSet = [];
+    for (var edgeIndex in sourceGraph) {
+      newEdgesSet.push({
+        from: sourceGraph[edgeIndex].source,
+        to: sourceGraph[edgeIndex].target,
+        label: sourceGraph[edgeIndex].relation,
       });
-      var newEdges = newEdgesArray.map((edge) => {
-        var sourceIndex;
-        var targetIndex;
-        for (var index in newNodesArray) {
-          if (edge.from === newNodesArray[index]) {
-            sourceIndex = index.toString();
-          }
-          if (edge.to === newNodesArray[index]) {
-            targetIndex = index.toString();
-          }
-        }
-        return {
-          id: `e${sourceIndex}-${targetIndex}`,
-          source: `${sourceIndex}`,
-          target: `${targetIndex}`,
-          data: {
-            label: `${edge.label}`,
-            update: updateEdge,
-          },
-          markerEnd: {
-            type: MarkerType.ArrowClosed,
-            width: 20,
-            height: 20,
-          },
-          type: "editable",
-          style: {
-            strokeWidth: 1,
-          },
-        };
-      });
-      var layoutResult = getLayoutedElements(newNodes, newEdges);
-      setNodes(layoutResult.nodes);
-      setEdges(layoutResult.edges);
-      setGraph({ nodes: layoutResult.nodes, edges: layoutResult.edges });
+      newNodesSet.push(sourceGraph[edgeIndex].source);
+      newNodesSet.push(sourceGraph[edgeIndex].target);
+    }
+    var newNodesArray = Array.from(new Set(newNodesSet));
+    var newEdgesArray = Array.from(new Set(newEdgesSet));
+    var newNodes = newNodesArray.map((node) => {
+      return {
+        id: newNodesArray.indexOf(node).toString(),
+        type: "editable",
+        draggable: true,
+        connectable: true,
+        position: { x: 0, y: 0 },
+        data: { label: node, update: updateNode },
+      };
     });
+    var newEdges = newEdgesArray.map((edge) => {
+      var sourceIndex;
+      var targetIndex;
+      for (var index in newNodesArray) {
+        if (edge.from === newNodesArray[index]) {
+          sourceIndex = index.toString();
+        }
+        if (edge.to === newNodesArray[index]) {
+          targetIndex = index.toString();
+        }
+      }
+      return {
+        id: `e${sourceIndex}-${targetIndex}`,
+        source: `${sourceIndex}`,
+        target: `${targetIndex}`,
+        data: {
+          label: `${edge.label}`,
+          update: updateEdge,
+        },
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+          width: 20,
+          height: 20,
+        },
+        type: "editable",
+        style: {
+          strokeWidth: 1,
+        },
+      };
+    });
+    var layoutResult = getLayoutedElements(newNodes, newEdges);
+    setNodes(layoutResult.nodes);
+    setEdges(layoutResult.edges);
+    setGraph({ nodes: layoutResult.nodes, edges: layoutResult.edges });
   };
 
   const onSave = useCallback(() => {
@@ -319,10 +316,20 @@ function AddNodeOnEdgeDrop({ graph, setGraph }) {
   );
 }
 
-export default function KnowledgeGraph({ graph, setGraph }) {
+export default function KnowledgeGraph({
+  graph,
+  setGraph,
+  sourceGraph,
+  setSourceGraph,
+}) {
   return (
     <ReactFlowProvider>
-      <AddNodeOnEdgeDrop graph={graph} setGraph={setGraph} />
+      <AddNodeOnEdgeDrop
+        graph={graph}
+        setGraph={setGraph}
+        sourceGraph={sourceGraph}
+        setSourceGraph={setSourceGraph}
+      />
     </ReactFlowProvider>
   );
 }
