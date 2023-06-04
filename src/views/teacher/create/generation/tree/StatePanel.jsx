@@ -59,10 +59,8 @@ export default function StatePanel({
   const handleUpload = (event) => {
     event.preventDefault();
     var body = {
-      // name: cookie.load("name"),
-      // role: cookie.load("role"),
-      name: "zirui",
-      role: "teacher",
+      name: cookie.load("name"),
+      role: cookie.load("role"),
       description: tree,
     };
     axios

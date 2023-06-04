@@ -5,7 +5,20 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
-export default function TreeCard({ name, field, concepts, setSelectedName }) {
+import { getNodeList } from "../question/Utils";
+
+export default function TreeCard({ tree, setActiveTree, setAnswerList }) {
+  const handleSelectTree = (event) => {
+    var tempActiveTree = getNodeList(tree);
+    var tempAnswerList = tempActiveTree.map((node) => {
+      var optionList = node.options.map((option) => {
+        return { option: option, result: false };
+      });
+      return { id: node.id, options: optionList };
+    });
+    setActiveTree(tempActiveTree);
+    setAnswerList(tempAnswerList);
+  };
   return (
     <Card
       sx={{
@@ -17,35 +30,17 @@ export default function TreeCard({ name, field, concepts, setSelectedName }) {
       }}
     >
       <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          ACTIVE
-        </Typography>
         <Typography variant="h5" component="div">
-          {name}
-        </Typography>
-        <Typography variant="body2">
-          Field: {field}
-          <br />
-          Concepts:{" "}
-          {concepts.map((concept) => {
-            return "[" + concept + "] ";
-          })}
+          TREE
         </Typography>
       </CardContent>
       <CardActions>
         <Button
-          onClick={() => {
-            setSelectedName(name);
+          onClick={(event) => {
+            handleSelectTree(event);
           }}
         >
           Select
-        </Button>
-        <Button
-          onClick={() => {
-            setSelectedName("None");
-          }}
-        >
-          Cancel
         </Button>
       </CardActions>
     </Card>

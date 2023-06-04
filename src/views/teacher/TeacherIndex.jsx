@@ -15,19 +15,36 @@ export default function TeacherIndex({ children }) {
         <Grid container spacing={2} sx={{ mt: 2, mb: 2 }}>
           <Grid
             item
-            xs={12}
+            xs={6}
             display="flex"
             justifyContent="center"
             alignItems="center"
           >
             <Button
               variant="outlined"
-              sx={{ width: "20%" }}
+              sx={{ width: "40%" }}
               onClick={() => {
                 navigate("create");
               }}
             >
-              <Typography variant="h6">🪴 Create New Trees </Typography>
+              <Typography variant="h6">🪴 Create Trees </Typography>
+            </Button>
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Button
+              variant="outlined"
+              sx={{ width: "40%" }}
+              onClick={() => {
+                navigate("manage");
+              }}
+            >
+              <Typography variant="h6">🏞 Manage Trees </Typography>
             </Button>
           </Grid>
         </Grid>

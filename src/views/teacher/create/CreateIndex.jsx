@@ -1,11 +1,8 @@
 import * as React from "react";
 import { useState } from "react";
-// MaterialUI
 import { Box, Tabs, Tab, Typography, Button, Grid } from "@mui/material";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-
-// Components
 import IdeationIndex from "./ideation/IdeationIndex";
 import ValidationIndex from "./validation/ValidationIndex";
 import GenerationIndex from "./generation/GenerationIndex";

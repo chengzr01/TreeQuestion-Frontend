@@ -1,8 +1,7 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button, Paper, Grid, Box, Typography } from "@mui/material";
 
-import { getNodeList, sampleTree } from "./question/Utils";
 import TreeSelector from "./tree/TreeSelector";
 import QuestionView from "./question/QuestionView";
 import CountDown from "./question/CountDown";
@@ -15,23 +14,9 @@ export default function AnswerIndex() {
     stem: "",
     options: [],
   });
-  const [activeTreeLoad, setActiveTreeLoad] = useState(false);
   const [start, setStart] = useState(false);
   const [finish, setFinish] = useState(false);
   const [answerList, setAnswerList] = useState([]);
-
-  const getActiveTree = () => {
-    setActiveTreeLoad(true);
-    var tempActiveTree = getNodeList(sampleTree);
-    var tempAnswerList = tempActiveTree.map((node) => {
-      var optionList = node.options.map((option) => {
-        return { option: option, result: false };
-      });
-      return { id: node.id, options: optionList };
-    });
-    setActiveTree(tempActiveTree);
-    setAnswerList(tempAnswerList);
-  };
 
   const getTreeView = () => {
     if (start) {
@@ -82,17 +67,16 @@ export default function AnswerIndex() {
     }
   };
 
-  useEffect(() => {
-    if (!activeTreeLoad) {
-      getActiveTree();
-    }
-  });
-
   return (
     <Box sx={{ m: 4, p: 4 }}>
       <Grid container spacing={4}>
         <Grid item xs={12}>
-          <TreeSelector />
+          <TreeSelector
+            activeTree={activeTree}
+            setActiveTree={setActiveTree}
+            answerList={answerList}
+            setAnswerList={setAnswerList}
+          />
         </Grid>
         <Grid item xs={3}>
           <Paper sx={{ p: 2 }}>

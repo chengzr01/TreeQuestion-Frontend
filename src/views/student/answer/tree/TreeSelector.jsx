@@ -1,16 +1,18 @@
 import * as React from "react";
-import { useState } from "react";
-
-import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
+import { useState, useEffect } from "react";
+import cookie from "react-cookies";
+import axios from "axios";
 import { styled } from "@mui/material/styles";
-import CardHeader from "@mui/material/CardHeader";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import Collapse from "@mui/material/Collapse";
-import IconButton from "@mui/material/IconButton";
+import {
+  Paper,
+  Grid,
+  CardHeader,
+  CardContent,
+  CardActions,
+  Collapse,
+  IconButton,
+} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
 import TreeCard from "./TreeCard";
 
 const ExpandMore = styled((props) => {
@@ -24,33 +26,40 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-function RecipeReviewCard(props) {
+export default function TreeSelector({ setActiveTree, setAnswerList }) {
   const [expanded, setExpanded] = React.useState(false);
-  const [treeList, setTreeList] = useState([
-    {
-      name: "Cybersecurity",
-      field: "Cybersecurity",
-      concepts: [
-        "Symmetric Encryption",
-        "Asymmetric Encryption",
-        "Hashing",
-        "Message Authentication Code",
-      ],
-    },
-  ]);
-  const [selectedName, setSelectedName] = useState("None");
+  const [treeList, setTreeList] = useState([]);
+  const [treeListLoad, setTreeListLoad] = useState(false);
 
   const getPaperHeader = () => {
-    if (selectedName === "None") return "🔴 No Tree Selected Now";
-    else return '🟢 Tree "' + selectedName + '" Selected Now';
+    return "Tree";
+  };
+
+  const getTreeList = () => {
+    setTreeListLoad(true);
+    var body = { name: cookie.load("name"), role: cookie.load("role") };
+    axios
+      .post("/tree/read_tree", body)
+      .then((res) => {
+        setTreeList(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
+  useEffect(() => {
+    if (!treeListLoad) {
+      getTreeList();
+    }
+  });
+
   return (
-    <Paper sx={{ width: "100%" }} {...props}>
+    <Paper sx={{ width: "100%" }}>
       <CardHeader title={getPaperHeader()} />
       <CardActions disableSpacing>
         <ExpandMore
@@ -69,10 +78,9 @@ function RecipeReviewCard(props) {
               return (
                 <Grid item xs={4}>
                   <TreeCard
-                    name={tree.name}
-                    field={tree.field}
-                    concepts={tree.concepts}
-                    setSelectedName={setSelectedName}
+                    tree={tree}
+                    setActiveTree={setActiveTree}
+                    setAnswerList={setAnswerList}
                   />
                 </Grid>
               );
@@ -82,8 +90,4 @@ function RecipeReviewCard(props) {
       </Collapse>
     </Paper>
   );
-}
-
-export default function TreeSelector(props) {
-  return <RecipeReviewCard {...props} />;
 }

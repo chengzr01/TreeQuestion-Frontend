@@ -1,12 +1,12 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-// Components
 import TeacherIndex from "./views/teacher/TeacherIndex";
 import StudentIndex from "./views/student/StudentIndex";
 import SignInPage from "./views/SignInPage";
 import SignUpPage from "./views/SignUpPage";
 import CreateIndex from "./views/teacher/create/CreateIndex";
+import ManageIndex from "./views/teacher/manage/ManageIndex";
 import AnswerIndex from "./views/student/answer/AnswerIndex";
 
 export default function TreeQuestionRouter() {
@@ -18,6 +18,7 @@ export default function TreeQuestionRouter() {
         <Route exact path="/signup" element={<SignUpPage />} />
         <Route exact path="/teacher" element={<TeacherIndex />}>
           <Route exact path="create" element={<CreateIndex />}></Route>
+          <Route exact path="manage" element={<ManageIndex />}></Route>
         </Route>
         <Route exact path="/student" element={<StudentIndex />}>
           <Route exact path="answer" element={<AnswerIndex />}></Route>
