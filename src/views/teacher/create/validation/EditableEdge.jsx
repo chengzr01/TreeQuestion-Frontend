@@ -12,6 +12,7 @@ import {
   DialogActions,
   DialogTitle,
   DialogContent,
+  Input,
 } from "@mui/material";
 
 import palette from "../../../../theme/palette";
@@ -60,7 +61,8 @@ export default function EditableEdge({
       <Dialog open={modifyOpen} TransitionComponent={Transition} keepMounted>
         <DialogTitle>{"Modify Edge"}</DialogTitle>
         <DialogContent>
-          <input
+          <Input
+            multiline
             value={edgeName}
             onChange={(evt) => setEdgeName(evt.target.value)}
           />

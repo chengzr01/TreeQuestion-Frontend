@@ -34,7 +34,11 @@ export default function ManageIndex() {
         {treeList.map((tree) => {
           return (
             <Grid item xs={4}>
-              <TreeCard tree={tree} />
+              <TreeCard
+                tree={tree}
+                treeListLoad={treeListLoad}
+                setTreeListLoad={setTreeListLoad}
+              />
             </Grid>
           );
         })}

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import {
   Button,
@@ -25,6 +25,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function IssueDialog({ open, setOpen, tree }) {
   const [studentList, setStudentList] = useState([]);
+  const [studentListUpdate, setStudentListUpdate] = useState(true);
   const [searchStudentName, setSearchStudentName] = useState("");
   const handleClose = () => {
     setOpen(false);
@@ -44,6 +45,7 @@ export default function IssueDialog({ open, setOpen, tree }) {
         if (newStudentList.indexOf(res.data.data.name) < 0)
           newStudentList.push(res.data.data.name);
         setStudentList(newStudentList);
+        setStudentListUpdate(false);
       })
       .catch((err) => {
         console.log(err);
@@ -55,7 +57,8 @@ export default function IssueDialog({ open, setOpen, tree }) {
       var body = {
         name: studentList[studentIndex],
         role: "student",
-        description: tree,
+        identifier: tree.identifier,
+        description: tree.description,
       };
       axios
         .post("/tree/create_tree", body)
@@ -67,6 +70,12 @@ export default function IssueDialog({ open, setOpen, tree }) {
         });
     }
   };
+
+  useEffect(() => {
+    if (!studentListUpdate) {
+      setStudentListUpdate(true);
+    }
+  }, [studentListUpdate]);
 
   return (
     <div>

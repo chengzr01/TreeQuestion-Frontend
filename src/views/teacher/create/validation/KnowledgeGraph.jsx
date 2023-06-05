@@ -26,8 +26,8 @@ import EditableNode from "./EditableNode";
 
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
-const nodeWidth = 450;
-const nodeHeight = 150;
+const nodeWidth = 800;
+const nodeHeight = 200;
 
 const getLayoutedElements = (nodes, edges, direction = "RL") => {
   const isHorizontal = direction === "RL";

@@ -12,6 +12,7 @@ import {
   DialogActions,
   DialogTitle,
   DialogContent,
+  Input,
 } from "@mui/material";
 
 import { Handle, Position } from "reactflow";
@@ -51,8 +52,9 @@ export default function EditableNode({ id, data, method, isConnectable }) {
       <Dialog open={modifyOpen} TransitionComponent={Transition} keepMounted>
         <DialogTitle>{"Modify Node"}</DialogTitle>
         <DialogContent>
-          <input
+          <Input
             value={nodeName}
+            multiline
             onChange={(evt) => setNodeName(evt.target.value)}
           />
         </DialogContent>

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import {
   Box,
@@ -31,6 +31,8 @@ export default function StatementRow({
   setCandidateUpdate,
 }) {
   const [open, setOpen] = useState(false);
+  const [keyUpdate, setKeyUpdate] = useState(true);
+  const [distractorUpdate, setDistractorUpdate] = useState(true);
   const [keyStatement, setKeyStatement] = useState("");
   const [distractorStatements, setDistractorStatements] = useState([]);
   const [heuristicValueList, setHeuristicValueList] = useState([]);
@@ -46,11 +48,13 @@ export default function StatementRow({
       axios
         .post("/tree/create_distractor_statement", body)
         .then((res) => {
+          console.log(res.data.data);
           var newStatementList = distractorStatements;
           res.data.data.distractors.forEach((element) => {
             newStatementList.push(element);
           });
           setDistractorStatements(newStatementList);
+          setDistractorUpdate(false);
         })
         .catch((err) => {
           console.log(err);
@@ -64,12 +68,23 @@ export default function StatementRow({
     axios
       .post("/tree/create_key_statement", body)
       .then((res) => {
+        console.log(res.data.data);
         setKeyStatement(res.data.data.key);
+        setKeyUpdate(false);
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
+  useEffect(() => {
+    if (!distractorUpdate) {
+      setDistractorUpdate(true);
+    }
+    if (!keyUpdate) {
+      setKeyUpdate(true);
+    }
+  }, [keyUpdate, distractorUpdate]);
 
   return (
     <React.Fragment>
@@ -114,27 +129,28 @@ export default function StatementRow({
                   alignContent="right"
                 >
                   <Tooltip title="Generate">
-                    <Button>
-                      <PublishedWithChangesOutlinedIcon
-                        sx={{ m: 1 }}
-                        onClick={(event) => {
-                          getKeyStatement(event);
-                        }}
-                      />
+                    <Button
+                      onClick={(event) => {
+                        getKeyStatement(event);
+                      }}
+                    >
+                      <PublishedWithChangesOutlinedIcon sx={{ m: 1 }} />
                     </Button>
                   </Tooltip>
                 </Grid>
                 <Grid item xs={12}>
-                  <StatementCard
-                    statement={keyStatement}
-                    type="key"
-                    keyCandidates={keyCandidates}
-                    setKeyCandidates={setKeyCandidates}
-                    distractorCandidates={distractorCandidates}
-                    setDistractorCandidates={setDistractorCandidates}
-                    candidateUpdate={candidateUpdate}
-                    setCandidateUpdate={setCandidateUpdate}
-                  ></StatementCard>
+                  {keyStatement === "" ? null : (
+                    <StatementCard
+                      statement={keyStatement}
+                      type="key"
+                      keyCandidates={keyCandidates}
+                      setKeyCandidates={setKeyCandidates}
+                      distractorCandidates={distractorCandidates}
+                      setDistractorCandidates={setDistractorCandidates}
+                      candidateUpdate={candidateUpdate}
+                      setCandidateUpdate={setCandidateUpdate}
+                    ></StatementCard>
+                  )}
                 </Grid>
                 <Grid item xs={10}>
                   <Typography
@@ -153,13 +169,12 @@ export default function StatementRow({
                   alignContent="right"
                 >
                   <Tooltip title="Generate">
-                    <Button>
-                      <PublishedWithChangesOutlinedIcon
-                        sx={{ m: 1 }}
-                        onClick={(event) => {
-                          getDistractingStatment(event);
-                        }}
-                      />
+                    <Button
+                      onClick={(event) => {
+                        getDistractingStatment(event);
+                      }}
+                    >
+                      <PublishedWithChangesOutlinedIcon sx={{ m: 1 }} />
                     </Button>
                   </Tooltip>
                 </Grid>

@@ -41,6 +41,7 @@ export default function IdeationInput({
           level: levels[levelIndex],
         };
         axios.post("/tree/create_knowledge_component", body).then((res) => {
+          console.log(res.data.data);
           var newKnowledgeList = knowledgeList;
           newKnowledgeList.push({
             field: currentField,

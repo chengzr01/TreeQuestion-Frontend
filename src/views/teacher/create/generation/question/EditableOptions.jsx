@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -9,9 +9,28 @@ import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import { Typography } from "@mui/material";
 
-export default function EditableText({ defaultValue, updateDefaultValue }) {
+const encodeArray = (array) => {
+  var newString = "";
+  for (var index in array) {
+    newString += array[index] + "\n";
+  }
+  return newString;
+};
+
+const decodeString = (string) => {
+  if (string.indexOf("\n") >= 0) {
+    return string.split("\n");
+  } else return [string];
+};
+
+export default function EditableOptions({
+  defaultValue,
+  updateDefaultValue,
+  update,
+  setUpdate,
+}) {
   const [editState, setEditState] = useState(false);
-  const [displayString, setDisplayString] = useState(defaultValue);
+  const [displayString, setDisplayString] = useState(encodeArray(defaultValue));
   const [changeVisible, setChangeVisible] = useState(false);
 
   const handleEditIconClick = (event) => {
@@ -22,7 +41,8 @@ export default function EditableText({ defaultValue, updateDefaultValue }) {
   const handleSaveIconClick = (event) => {
     event.preventDefault();
     setEditState(!editState);
-    updateDefaultValue(displayString);
+    console.log(displayString);
+    updateDefaultValue(decodeString(displayString));
   };
 
   const handleInputValueChange = (event) => {
@@ -62,6 +82,7 @@ export default function EditableText({ defaultValue, updateDefaultValue }) {
     if (editState) {
       return (
         <Input
+          multiline
           value={displayString}
           onChange={(event) => {
             handleInputValueChange(event);
@@ -73,6 +94,14 @@ export default function EditableText({ defaultValue, updateDefaultValue }) {
       return <Typography variant="body"> {displayString} </Typography>;
     }
   };
+
+  useEffect(() => {
+    if (!update) {
+      setDisplayString(defaultValue);
+      setUpdate(true);
+    }
+  }, [update, defaultValue, setUpdate]);
+
   return (
     <Box
       onMouseEnter={(event) => {
@@ -84,21 +113,16 @@ export default function EditableText({ defaultValue, updateDefaultValue }) {
         setChangeVisible(false);
       }}
     >
-      <Grid
-        container
-        spacing={2}
-        sx={{
-          p: 1,
-          pb: 2,
-          "&:hover": {
-            backgroundColor: "grey.200",
-            opacity: [0.75, 0.75, 0.75],
-          },
-        }}
-      >
+      <Grid container spacing={2}>
         <Grid
           item
           xs={10}
+          sx={{
+            "&:hover": {
+              backgroundColor: "grey.200",
+              opacity: [0.75, 0.75, 0.75],
+            },
+          }}
           display="flex"
           justifyContent="left"
           alignItems="left"

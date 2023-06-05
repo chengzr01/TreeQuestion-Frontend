@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-
+import axios from "axios";
 import {
   Button,
   Card,
@@ -12,12 +12,15 @@ import {
   Divider,
   styled,
   Chip,
+  Menu,
+  MenuItem,
 } from "@mui/material";
-
 import AddIcon from "@mui/icons-material/Add";
 import BackspaceIconOutlined from "@mui/icons-material/BackspaceOutlined";
 import PublishedWithChangesOutlinedIcon from "@mui/icons-material/PublishedWithChangesOutlined";
-import axios from "axios";
+
+import EditableText from "./EditableText";
+import EditableOptions from "./EditableOptions";
 
 const Root = styled("div")(({ theme }) => ({
   width: "100%",
@@ -46,12 +49,52 @@ export default function QuestionPanel({
   setEdited,
 }) {
   const [ID, setID] = useState("0");
-  const [questionConcepts, setQuestionConcepts] = useState("");
-  const [questionLevel, setQuestionLevel] = useState("");
+  const [questionConcepts, setQuestionConcepts] = useState(null);
+  const [questionLevel, setQuestionLevel] = useState(null);
   const [questionType, setQuestionType] = useState("Multi-Choice");
   const [questionStem, setQuestionStem] = useState("");
+  const [questionStemUpdate, setQuestionStemUpdate] = useState(true);
   const [questionOptions, setQuestionOptions] = useState([]);
+  const [questionOptionsUpdate, setQuestionOptionsUpdate] = useState(true);
   const [questionAnswer, setQuestionAnswer] = useState("");
+  const [questionAnswerUpdate, setQuestionAnswerUpdate] = useState(true);
+
+  const [keyAnchorEl, setKeyAnchorEl] = useState(null);
+  const [activeKey, setActiveKey] = useState(null);
+  const keyOpen = Boolean(keyAnchorEl);
+  const handleKeyClick = (event) => {
+    setKeyAnchorEl(event.currentTarget);
+  };
+  const handleKeyClose = (event) => {
+    setKeyAnchorEl(null);
+  };
+  const handleKeyDelete = (event) => {
+    var newKeyCandidates = keyCandidates;
+    if (newKeyCandidates.indexOf(activeKey) >= 0) {
+      newKeyCandidates.splice(keyCandidates.indexOf(activeKey), 1);
+    }
+    setKeyCandidates(newKeyCandidates);
+  };
+
+  const [distractorAnchorEl, setDistractorAnchorEl] = useState(null);
+  const [activeDistractor, setActiveDistractor] = useState(null);
+  const distractorOpen = Boolean(distractorAnchorEl);
+  const handleDistractorClick = (event) => {
+    setDistractorAnchorEl(event.currentTarget);
+  };
+  const handleDistractorClose = (event) => {
+    setDistractorAnchorEl(null);
+  };
+  const handleDistractorDelete = (event) => {
+    var newDistractorCandidates = distractorCandidates;
+    if (newDistractorCandidates.indexOf(activeDistractor) >= 0) {
+      newDistractorCandidates.splice(
+        newDistractorCandidates.indexOf(activeDistractor),
+        1
+      );
+    }
+    setDistractorCandidates(newDistractorCandidates);
+  };
 
   const getQuestion = (event) => {
     var maxID = 0;
@@ -76,6 +119,9 @@ export default function QuestionPanel({
         setQuestionStem(res.data.data.stem);
         setQuestionOptions(res.data.data.options);
         setQuestionAnswer(res.data.data.answer);
+        setQuestionStemUpdate(false);
+        setQuestionOptionsUpdate(false);
+        setQuestionAnswerUpdate(false);
       })
       .catch((err) => {
         console.log(err);
@@ -108,10 +154,12 @@ export default function QuestionPanel({
   };
 
   const handleClear = () => {
-    setID("");
     setQuestionStem("");
     setQuestionOptions([]);
     setQuestionAnswer("");
+    setQuestionStemUpdate(false);
+    setQuestionOptionsUpdate(false);
+    setQuestionAnswerUpdate(false);
   };
 
   useEffect(() => {
@@ -119,6 +167,7 @@ export default function QuestionPanel({
       setCandidateUpdate(true);
     }
   });
+
   return (
     <Card sx={{ m: 4, p: 4 }}>
       <Grid container spacing={2}>
@@ -129,11 +178,40 @@ export default function QuestionPanel({
         </Root>
         {keyCandidates.map((key) => {
           return (
-            <Typography variant="body2" color="text.secondary" gutterBottom>
-              <i>{key}</i>
-            </Typography>
+            <div>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                gutterBottom
+                onClick={(event) => {
+                  setActiveKey(key);
+                  handleKeyClick(event);
+                }}
+              >
+                {key}
+              </Typography>
+              <Menu
+                id="basic-menu"
+                anchorEl={keyAnchorEl}
+                open={keyOpen}
+                onClose={handleKeyClose}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
+                }}
+              >
+                <MenuItem
+                  onClick={(event) => {
+                    handleKeyDelete(event);
+                    handleKeyClose(event);
+                  }}
+                >
+                  Delete
+                </MenuItem>
+              </Menu>
+            </div>
           );
         })}
+
         <Root>
           <Divider sx={{ mt: 1, mb: 1 }}>
             <Chip label="Distractors" />
@@ -141,9 +219,37 @@ export default function QuestionPanel({
         </Root>
         {distractorCandidates.map((distractor) => {
           return (
-            <Typography variant="body2" color="text.secondary" gutterBottom>
-              <i> {distractor}</i>
-            </Typography>
+            <div>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                gutterBottom
+                onClick={(event) => {
+                  setActiveDistractor(distractor);
+                  handleDistractorClick(event);
+                }}
+              >
+                {distractor}
+              </Typography>
+              <Menu
+                id="basic-menu"
+                anchorEl={distractorAnchorEl}
+                open={distractorOpen}
+                onClose={handleDistractorClose}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
+                }}
+              >
+                <MenuItem
+                  onClick={(event) => {
+                    handleDistractorDelete(event);
+                    handleDistractorClose(event);
+                  }}
+                >
+                  Delete
+                </MenuItem>
+              </Menu>
+            </div>
           );
         })}
         <Root>
@@ -222,7 +328,12 @@ export default function QuestionPanel({
           </Typography>
         </Grid>
         <Grid item xs={10}>
-          {questionStem}
+          <EditableText
+            defaultValue={questionStem}
+            updateDefaultValue={setQuestionStem}
+            update={questionStemUpdate}
+            setUpdate={setQuestionStemUpdate}
+          ></EditableText>
         </Grid>
         <Grid item xs={2}>
           <Typography
@@ -237,9 +348,12 @@ export default function QuestionPanel({
           </Typography>
         </Grid>
         <Grid item xs={10}>
-          {questionOptions.map((option) => (
-            <Typography>{option}</Typography>
-          ))}
+          <EditableOptions
+            defaultValue={questionOptions}
+            updateDefaultValue={setQuestionOptions}
+            update={questionOptionsUpdate}
+            setUpdate={setQuestionOptionsUpdate}
+          />
         </Grid>
         <Grid item xs={2}>
           <Typography
@@ -254,7 +368,12 @@ export default function QuestionPanel({
           </Typography>
         </Grid>
         <Grid item xs={10}>
-          {questionAnswer}
+          <EditableText
+            defaultValue={questionAnswer}
+            updateDefaultValue={setQuestionAnswer}
+            update={questionAnswerUpdate}
+            setUpdate={setQuestionAnswerUpdate}
+          ></EditableText>
         </Grid>
         <Grid
           item
@@ -264,30 +383,30 @@ export default function QuestionPanel({
           alignContent="center"
         >
           <Tooltip title="Generate">
-            <Button>
-              <PublishedWithChangesOutlinedIcon
-                onClick={(event) => {
-                  getQuestion(event);
-                }}
-              />
+            <Button
+              onClick={(event) => {
+                getQuestion(event);
+              }}
+            >
+              <PublishedWithChangesOutlinedIcon />
             </Button>
           </Tooltip>
           <Tooltip title="Add">
-            <Button>
-              <AddIcon
-                onClick={(event) => {
-                  handleAdd(event);
-                }}
-              />
+            <Button
+              onClick={(event) => {
+                handleAdd(event);
+              }}
+            >
+              <AddIcon />
             </Button>
           </Tooltip>
           <Tooltip title="Clear">
-            <Button>
-              <BackspaceIconOutlined
-                onClick={(event) => {
-                  handleClear(event);
-                }}
-              />
+            <Button
+              onClick={(event) => {
+                handleClear(event);
+              }}
+            >
+              <BackspaceIconOutlined />
             </Button>
           </Tooltip>
         </Grid>

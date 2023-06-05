@@ -1,5 +1,6 @@
 import * as React from "react";
-
+import cookie from "react-cookies";
+import axios from "axios";
 import {
   Card,
   CardActions,
@@ -14,11 +15,29 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ShareIcon from "@mui/icons-material/Share";
 import IssueDialog from "./IssueDialog";
 
-export default function TreeCard({ tree }) {
+export default function TreeCard({ tree, treeListLoad, setTreeListLoad }) {
   const [open, setOpen] = React.useState(false);
 
   const handleIssueDialogOpen = () => {
     setOpen(true);
+  };
+
+  const handleDelete = (event) => {
+    var body = {
+      name: cookie.load("name"),
+      role: cookie.load("role"),
+      identifier: tree.identifier,
+      description: tree.description,
+    };
+    axios
+      .post("/tree/delete_tree", body)
+      .then((res) => {
+        console.log(res.data.data);
+        setTreeListLoad(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -26,14 +45,12 @@ export default function TreeCard({ tree }) {
       <IssueDialog open={open} setOpen={setOpen} tree={tree} />
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Tree
+          {tree.identifier}
         </Typography>
         <Typography variant="h5" component="div"></Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          # Node: {tree.nodes.length}
-        </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          # Edge: {tree.edges.length}
+          # Node: {tree.description.nodes.length}
+          <br /># Edge: {tree.description.edges.length}
         </Typography>
       </CardContent>
       <CardActions>
@@ -46,17 +63,21 @@ export default function TreeCard({ tree }) {
             justifyContent={"center"}
           >
             <Tooltip title="Delete">
-              <Button>
+              <Button
+                onClick={(event) => {
+                  handleDelete(event);
+                }}
+              >
                 <DeleteIcon />
               </Button>
             </Tooltip>
             <Tooltip title="Issue">
-              <Button>
-                <ShareIcon
-                  onClick={(event) => {
-                    handleIssueDialogOpen(event);
-                  }}
-                />
+              <Button
+                onClick={(event) => {
+                  handleIssueDialogOpen(event);
+                }}
+              >
+                <ShareIcon />
               </Button>
             </Tooltip>
           </Grid>

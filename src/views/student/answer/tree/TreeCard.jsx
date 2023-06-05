@@ -9,7 +9,7 @@ import { getNodeList } from "../question/Utils";
 
 export default function TreeCard({ tree, setActiveTree, setAnswerList }) {
   const handleSelectTree = (event) => {
-    var tempActiveTree = getNodeList(tree);
+    var tempActiveTree = getNodeList(tree.description);
     var tempAnswerList = tempActiveTree.map((node) => {
       var optionList = node.options.map((option) => {
         return { option: option, result: false };
@@ -31,7 +31,7 @@ export default function TreeCard({ tree, setActiveTree, setAnswerList }) {
     >
       <CardContent>
         <Typography variant="h5" component="div">
-          TREE
+          {tree.identifier}
         </Typography>
       </CardContent>
       <CardActions>

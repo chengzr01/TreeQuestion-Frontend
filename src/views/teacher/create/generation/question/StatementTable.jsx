@@ -56,27 +56,31 @@ export default function StatementTable({
             </TableRow>
           </TableHead>
           <TableBody>
-            {graph.edges
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((edge) => {
-                var row = {
-                  source: graph.nodes[parseInt(edge.source)].data.label,
-                  label: edge.data.label,
-                  target: graph.nodes[parseInt(edge.target)].data.label,
-                };
-                return (
-                  <StatementRow
-                    key={edge.id}
-                    row={row}
-                    keyCandidates={keyCandidates}
-                    setKeyCandidates={setKeyCandidates}
-                    distractorCandidates={distractorCandidates}
-                    setDistractorCandidates={setDistractorCandidates}
-                    candidateUpdate={candidateUpdate}
-                    setCandidateUpdate={setCandidateUpdate}
-                  ></StatementRow>
-                );
-              })}
+            {(rowsPerPage > 0
+              ? graph.edges.slice(
+                  page * rowsPerPage,
+                  page * rowsPerPage + rowsPerPage
+                )
+              : graph.edges
+            ).map((edge) => {
+              var row = {
+                source: graph.nodes[parseInt(edge.source)].data.label,
+                label: edge.data.label,
+                target: graph.nodes[parseInt(edge.target)].data.label,
+              };
+              return (
+                <StatementRow
+                  key={edge.id}
+                  row={row}
+                  keyCandidates={keyCandidates}
+                  setKeyCandidates={setKeyCandidates}
+                  distractorCandidates={distractorCandidates}
+                  setDistractorCandidates={setDistractorCandidates}
+                  candidateUpdate={candidateUpdate}
+                  setCandidateUpdate={setCandidateUpdate}
+                ></StatementRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>

@@ -15,6 +15,7 @@ import {
   Chip,
 } from "@mui/material";
 import UploadIcon from "@mui/icons-material/Upload";
+import EditableText from "../question/EditableText";
 
 const levels = [
   "Remember",
@@ -44,6 +45,8 @@ export default function StatePanel({
   const [expectedWidth, setExpectedWidth] = useState(50);
   const [expectedHeight, setExpectedHeight] = useState(50);
   const [suggestionList, setSuggestionList] = useState([]);
+  const [identifier, setIdentifier] = useState("Identifier");
+  const [identifierUpdate, setIdentifierUpdate] = useState(true);
   const conceptWeights = concepts.map((cpt) => {
     return { concept: cpt, weight: 1 };
   });
@@ -61,6 +64,7 @@ export default function StatePanel({
     var body = {
       name: cookie.load("name"),
       role: cookie.load("role"),
+      identifier: identifier,
       description: tree,
     };
     axios
@@ -531,18 +535,32 @@ export default function StatePanel({
       <Grid container spacing={2}>
         <Grid
           item
-          xs={12}
+          xs={10}
+          display={"flex"}
+          alignContent={"left"}
+          justifyContent={"left"}
+        >
+          <EditableText
+            defaultValue={identifier}
+            updateDefaultValue={setIdentifier}
+            update={identifierUpdate}
+            setUpdate={identifierUpdate}
+          ></EditableText>
+        </Grid>
+        <Grid
+          item
+          xs={2}
           display={"flex"}
           alignContent={"center"}
           justifyContent={"center"}
         >
           <Tooltip title="Upload">
-            <Button>
-              <UploadIcon
-                onClick={(event) => {
-                  handleUpload(event);
-                }}
-              />
+            <Button
+              onClick={(event) => {
+                handleUpload(event);
+              }}
+            >
+              <UploadIcon />
             </Button>
           </Tooltip>
         </Grid>

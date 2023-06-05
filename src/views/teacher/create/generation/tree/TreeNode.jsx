@@ -130,15 +130,19 @@ export default function TreeNode({ data, isConnectable }) {
                 </Typography>
               </Grid>
               <Grid item xs={10}>
-                <Typography
-                  sx={{ fontSize: 14, pt: 1 }}
-                  gutterBottom
-                  display="flex"
-                  justifyContent="left"
-                  alignContent="left"
-                >
-                  {data.options}
-                </Typography>
+                {data.options.map((option) => {
+                  return (
+                    <Typography
+                      sx={{ fontSize: 14, pt: 1 }}
+                      gutterBottom
+                      display="flex"
+                      justifyContent="left"
+                      alignContent="left"
+                    >
+                      {option}
+                    </Typography>
+                  );
+                })}
               </Grid>
               <Grid item xs={2}>
                 <Typography
