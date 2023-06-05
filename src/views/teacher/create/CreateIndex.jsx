@@ -101,8 +101,6 @@ export default function CreateIndex() {
       </Box>
       <TabPanel value={value} index={0}>
         <IdeationIndex
-          value={value}
-          setValue={setValue}
           concepts={concepts}
           setConcepts={setConcepts}
           field={field}
@@ -115,8 +113,6 @@ export default function CreateIndex() {
       </TabPanel>
       <TabPanel value={value} index={1}>
         <ValidationIndex
-          value={value}
-          setValue={setValue}
           graph={graph}
           setGraph={setGraph}
           sourceGraph={sourceGraph}
@@ -125,8 +121,6 @@ export default function CreateIndex() {
       </TabPanel>
       <TabPanel value={value} index={2}>
         <GenerationIndex
-          value={value}
-          setValue={setValue}
           concepts={concepts}
           setConcepts={setConcepts}
           field={field}

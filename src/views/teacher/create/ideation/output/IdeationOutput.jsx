@@ -7,8 +7,6 @@ import PolylineIcon from "@mui/icons-material/Polyline";
 import ExpandableCard from "./ExpandableCard";
 
 export default function IdeationOutput({
-  value,
-  setValue,
   update,
   setUpdate,
   concepts,

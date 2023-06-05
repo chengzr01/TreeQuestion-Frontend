@@ -6,8 +6,6 @@ import IdeationInput from "./input/IdeationInput";
 import IdeationOutput from "./output/IdeationOutput";
 
 export default function IdeationIndex({
-  value,
-  setValue,
   concepts,
   setConcepts,
   field,
@@ -32,8 +30,6 @@ export default function IdeationIndex({
         setKnowledgeList={setKnowledgeList}
       />
       <IdeationOutput
-        value={value}
-        setValue={setValue}
         update={update}
         setUpdate={setUpdate}
         concepts={concepts}

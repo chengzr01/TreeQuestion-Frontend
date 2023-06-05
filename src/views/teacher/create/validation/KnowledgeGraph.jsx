@@ -258,7 +258,7 @@ function AddNodeOnEdgeDrop({ graph, setGraph, sourceGraph, setSourceGraph }) {
   });
 
   return (
-    <div style={{ width: "100%", height: "80%" }} ref={reactFlowWrapper}>
+    <div style={{ width: "100%", height: "100%" }} ref={reactFlowWrapper}>
       <ReactFlow
         nodes={nodes}
         edges={edges}

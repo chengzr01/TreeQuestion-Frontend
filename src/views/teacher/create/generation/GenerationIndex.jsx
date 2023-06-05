@@ -10,8 +10,6 @@ import TreePanel from "./tree/TreePanel";
 import StatePanel from "./tree/StatePanel";
 
 export default function GenerationIndex({
-  value,
-  setValue,
   concepts,
   setConcepts,
   field,
