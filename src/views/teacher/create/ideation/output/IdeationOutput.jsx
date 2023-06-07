@@ -1,5 +1,6 @@
 import * as React from "react";
 import axios from "axios";
+import cookie from "react-cookies";
 import { useEffect, useState } from "react";
 import { Box, Grid, Paper, Typography, Button, Tooltip } from "@mui/material";
 import PolylineIcon from "@mui/icons-material/Polyline";
@@ -30,6 +31,7 @@ export default function IdeationOutput({
       concepts: concepts,
       field: field,
       knowledge: knowledgeContent,
+      cache: cookie.load("cache"),
     };
     axios
       .post("/tree/create_knowledge_graph", body)

@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import cookie from "react-cookies";
 import {
   Button,
   Card,
@@ -111,6 +112,7 @@ export default function QuestionPanel({
       type: questionType,
       keys: keyCandidates,
       distractors: distractorCandidates,
+      cache: cookie.load("cache"),
     };
     axios
       .post("/tree/create_question", body)

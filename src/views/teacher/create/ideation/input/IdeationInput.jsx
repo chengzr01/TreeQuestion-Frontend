@@ -1,10 +1,8 @@
 import * as React from "react";
 import { useState } from "react";
-
 import axios from "axios";
-
+import cookie from "react-cookies";
 import { Button, Card, Grid, TextField, Snackbar } from "@mui/material";
-
 import IdeationLevels from "./IdeationLevels";
 
 export default function IdeationInput({
@@ -51,7 +49,9 @@ export default function IdeationInput({
           field: currentField,
           concept: currentConcepts[conceptIndex],
           level: levels[levelIndex],
+          cache: cookie.load("cache"),
         };
+        console.log(body);
         axios
           .post("/tree/create_knowledge_component", body)
           .then((res) => {

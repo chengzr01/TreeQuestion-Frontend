@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import cookie from "react-cookies";
 import {
   Box,
   Grid,
@@ -44,6 +45,7 @@ export default function StatementRow({
         label: row.label,
         target: row.target,
         template: heuristicValueList[index].content,
+        cache: cookie.load("cache"),
       };
       axios
         .post("/tree/create_distractor_statement", body)
@@ -64,7 +66,12 @@ export default function StatementRow({
   };
 
   const getKeyStatement = () => {
-    var body = { source: row.source, target: row.target, label: row.label };
+    var body = {
+      source: row.source,
+      target: row.target,
+      label: row.label,
+      cache: cookie.load("cache"),
+    };
     axios
       .post("/tree/create_key_statement", body)
       .then((res) => {
