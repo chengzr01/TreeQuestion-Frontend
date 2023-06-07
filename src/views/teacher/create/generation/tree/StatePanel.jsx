@@ -436,7 +436,7 @@ export default function StatePanel({
 
   return (
     <Card sx={{ m: 4, p: 4, height: "80vh" }}>
-      <Root>
+      {/* <Root>
         <Divider sx={{ mt: 1, mb: 1 }}>
           <Chip label="Expectations" />
         </Divider>
@@ -512,7 +512,7 @@ export default function StatePanel({
             {(expectedHeight / 50).toFixed(2)}
           </Grid>
         </Grid>
-      </Box>
+      </Box> */}
       <Root>
         <Divider sx={{ mt: 1, mb: 1 }}>
           <Chip label="Suggestions" />

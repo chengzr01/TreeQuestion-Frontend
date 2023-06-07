@@ -32,7 +32,7 @@ const heuristics = [
   {
     index: 1,
     content:
-      "According to the question, [restate the concepts being mentioned in the prompt] + [object] + is + [concept content] + Examples of + [object] + are + [example 1] + [example 2] + [example 3]",
+      "According to the question, [restate the concepts being mentioned in the prompt] + [object] + is + [concept content] + Examples of + [object] + are + [example 1] + [example 2] + [example 3].",
     level: "Remember",
   },
   {
@@ -44,31 +44,31 @@ const heuristics = [
   {
     index: 3,
     content:
-      "[cause] + [effect] + because of + [object] + [context of concept] + Therefore + [restate cause and effect relationship]",
+      "[cause] + [effect] + because of + [object] + [context of concept] + Therefore + [restate cause and effect relationship].",
     level: "Remember",
   },
   {
     index: 4,
     content:
-      "The features/main concepts/advantage/disadvantage + of + [object] + are + [main point 1] + [main point 2] + [main point 3]",
+      "The features/main concepts/advantage/disadvantage + of + [object] + are + [main point 1] + [main point 2] + [main point 3].",
     level: "Remember",
   },
   {
     index: 5,
     content:
-      "The main idea of [object/concept] is [context]. The significance of [object] is + [point 1] + [point 2] + [point 3]",
+      "The main idea of [object/concept] is [context]. The significance of [object] is + [point 1] + [point 2] + [point 3].",
     level: "Understand",
   },
   {
     index: 6,
     content:
-      "The purpose of [event/concept] is [context]. In order to accomplish [purpose context], the [personas] + did + [context]",
+      "The purpose of [event/concept] is [context]. In order to accomplish [purpose context], the [personas] + did + [context].",
     level: "Understand",
   },
   {
     index: 7,
     content:
-      "The central theme of [object] is [context] because [reason 1] + [reason 2] + [reason 3] + [restate the purpose]",
+      "The central theme of [object] is [context] because [reason 1] + [reason 2] + [reason 3] + [restate the purpose].",
     level: "Understand",
   },
   {
@@ -86,7 +86,7 @@ const heuristics = [
   {
     index: 10,
     content:
-      "[concept] can be applied as [context] because + [reason 1] + [reason 2] + [reason 3]",
+      "[concept] can be applied as [context] because + [reason 1] + [reason 2] + [reason 3].",
     level: "Apply",
   },
   {

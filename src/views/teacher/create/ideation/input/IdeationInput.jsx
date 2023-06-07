@@ -3,10 +3,7 @@ import { useState } from "react";
 
 import axios from "axios";
 
-import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
+import { Button, Card, Grid, TextField, Snackbar } from "@mui/material";
 
 import IdeationLevels from "./IdeationLevels";
 
@@ -23,6 +20,21 @@ export default function IdeationInput({
   const [levels, setLevels] = useState([]);
   const [currentConcepts, setCurrentConcepts] = useState([]);
   const [currentField, setCurrentField] = useState("");
+  const [state, setState] = React.useState({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, open } = state;
+  const [message, setMessage] = useState("");
+
+  const handleClick = (newState) => () => {
+    setState({ open: true, ...newState });
+  };
+
+  const handleClose = () => {
+    setState({ ...state, open: false });
+  };
 
   const handleInputChange = (event) => {
     event.preventDefault();
@@ -40,28 +52,42 @@ export default function IdeationInput({
           concept: currentConcepts[conceptIndex],
           level: levels[levelIndex],
         };
-        axios.post("/tree/create_knowledge_component", body).then((res) => {
-          console.log(res.data.data);
-          var newKnowledgeList = knowledgeList;
-          newKnowledgeList.push({
-            field: currentField,
-            concept: currentConcepts[conceptIndex],
-            level: levels[levelIndex],
-            content: res.data.data.knowledge,
-          });
-          setKnowledgeList(newKnowledgeList);
-          setUpdate(false);
-          var newConcepts = concepts;
-          for (var currentConceptsIndex in currentConcepts) {
-            if (
-              newConcepts.indexOf(currentConcepts[currentConceptsIndex]) < 0
-            ) {
-              newConcepts.push(currentConcepts[currentConceptsIndex]);
+        axios
+          .post("/tree/create_knowledge_component", body)
+          .then((res) => {
+            console.log(res.data.data);
+            setMessage("Succeed");
+            handleClick({
+              vertical: "top",
+              horizontal: "center",
+            });
+            var newKnowledgeList = knowledgeList;
+            newKnowledgeList.push({
+              field: currentField,
+              concept: currentConcepts[conceptIndex],
+              level: levels[levelIndex],
+              content: res.data.data.knowledge,
+            });
+            setKnowledgeList(newKnowledgeList);
+            setUpdate(false);
+            var newConcepts = concepts;
+            for (var currentConceptsIndex in currentConcepts) {
+              if (
+                newConcepts.indexOf(currentConcepts[currentConceptsIndex]) < 0
+              ) {
+                newConcepts.push(currentConcepts[currentConceptsIndex]);
+              }
             }
-          }
-          setConcepts(newConcepts);
-          setField(currentField);
-        });
+            setConcepts(newConcepts);
+            setField(currentField);
+          })
+          .catch((err) => {
+            setMessage("Fail");
+            handleClick({
+              vertical: "center",
+              horizontal: "center",
+            });
+          });
       }
     }
   };
