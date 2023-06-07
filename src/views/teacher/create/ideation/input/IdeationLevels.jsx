@@ -3,11 +3,10 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 
 export default function IdeationLevels({ setLevels }) {
-  const [value, setValue] = React.useState([]);
+  const [value, setValue] = React.useState(null);
 
   return (
     <Autocomplete
-      multiple
       value={value}
       onChange={(event, newValue) => {
         setValue(newValue);

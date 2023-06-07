@@ -14,6 +14,8 @@ export default function IdeationIndex({
   setKnowledgeList,
   sourceGraph,
   setSourceGraph,
+  value,
+  setValue,
 }) {
   const [update, setUpdate] = useState(false);
 
@@ -40,6 +42,8 @@ export default function IdeationIndex({
         setKnowledgeList={setKnowledgeList}
         sourceGraph={sourceGraph}
         setSourceGraph={setSourceGraph}
+        value={value}
+        setValue={setValue}
       />
     </Box>
   );

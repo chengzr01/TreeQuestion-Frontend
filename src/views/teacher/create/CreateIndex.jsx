@@ -109,6 +109,8 @@ export default function CreateIndex() {
           setKnowledgeList={setKnowledgeList}
           sourceGraph={sourceGraph}
           setSourceGraph={setSourceGraph}
+          value={value}
+          setValue={setValue}
         />
       </TabPanel>
       <TabPanel value={value} index={1}>

@@ -18,6 +18,8 @@ export default function IdeationOutput({
   setKnowledgeList,
   sourceGraph,
   setSourceGraph,
+  value,
+  setValue,
 }) {
   const [selectedKnowledge, setSelectedKnowledge] = useState([]);
   const handleGraph = (event) => {
@@ -38,6 +40,7 @@ export default function IdeationOutput({
       .then((res) => {
         console.log(res.data.data);
         setSourceGraph(res.data.data.graph);
+        setValue(1);
       })
       .catch((err) => {
         console.log(err);
