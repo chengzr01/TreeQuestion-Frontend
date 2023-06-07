@@ -131,7 +131,7 @@ export default function TreeBar({ identity }) {
                   </Typography>
                 </Stack>
               </MenuItem>
-              <MenuItem
+              {/* <MenuItem
                 onClick={() => {
                   handleDeleteCache();
                 }}
@@ -140,7 +140,7 @@ export default function TreeBar({ identity }) {
                   <ClearAllIcon />
                   <Typography>Delete Cache</Typography>
                 </Stack>
-              </MenuItem>
+              </MenuItem> */}
               <MenuItem
                 onClick={() => {
                   handleSignOut();
