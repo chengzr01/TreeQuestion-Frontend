@@ -14,11 +14,13 @@ export default function IdeationIndex({
   setKnowledgeList,
   sourceGraph,
   setSourceGraph,
+  sourceText,
+  setSourceText,
   value,
   setValue,
 }) {
   const [update, setUpdate] = useState(false);
-
+  const [generateState, setGenerateState] = useState("initalize");
   return (
     <Box>
       <IdeationInput
@@ -30,6 +32,8 @@ export default function IdeationIndex({
         setField={setField}
         knowledgeList={knowledgeList}
         setKnowledgeList={setKnowledgeList}
+        generateState={generateState}
+        setGenerateState={setGenerateState}
       />
       <IdeationOutput
         update={update}
@@ -44,6 +48,10 @@ export default function IdeationIndex({
         setSourceGraph={setSourceGraph}
         value={value}
         setValue={setValue}
+        generateState={generateState}
+        setGenerateState={setGenerateState}
+        sourceText={sourceText}
+        setSourceText={setSourceText}
       />
     </Box>
   );

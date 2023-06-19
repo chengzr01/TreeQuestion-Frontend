@@ -2,7 +2,18 @@ import * as React from "react";
 import { useState } from "react";
 import axios from "axios";
 import cookie from "react-cookies";
-import { Button, Card, Grid, TextField } from "@mui/material";
+import {
+  Button,
+  Card,
+  Grid,
+  TextField,
+  CircularProgress,
+  Stack,
+} from "@mui/material";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
+
 import IdeationLevels from "./IdeationLevels";
 
 export default function IdeationInput({
@@ -14,6 +25,8 @@ export default function IdeationInput({
   setField,
   knowledgeList,
   setKnowledgeList,
+  generateState,
+  setGenerateState,
 }) {
   const [levels, setLevels] = useState("");
   const [currentConcepts, setCurrentConcepts] = useState("");
@@ -27,7 +40,7 @@ export default function IdeationInput({
   };
 
   const handleSubmit = (event) => {
-    event.preventDefault();
+    setGenerateState("waiting");
     var body = {
       field: currentField,
       concept: currentConcepts,
@@ -54,48 +67,78 @@ export default function IdeationInput({
         }
         setConcepts(newConcepts);
         setField(currentField);
+        setGenerateState("success");
       })
       .catch((err) => {
-        console.log(err);
+        setGenerateState("failure");
       });
   };
 
+  const getGenerateStateComponent = () => {
+    if (generateState === "waiting") return <CircularProgress size="2vw" />;
+    else if (generateState === "success")
+      return (
+        <CheckCircleOutlineIcon
+          sx={{ fontSize: "2vw", color: "primary.main" }}
+        />
+      );
+    else if (generateState === "failure")
+      return <ErrorOutlineIcon sx={{ fontSize: "2vw", color: "error.main" }} />;
+    else
+      return (
+        <RadioButtonCheckedIcon
+          sx={{ fontSize: "2vw", color: "primary.main" }}
+        />
+      );
+  };
+
   return (
-    <Card sx={{ m: 4, p: 4 }}>
-      <Grid container direction="row" spacing={6}>
-        <Grid item xs={8}>
+    <Card sx={{ ml: 4, mr: 4, mt: 2, mb: 2, p: 4 }}>
+      <Grid container direction="row" spacing={2}>
+        <Grid item xs={3}>
           <TextField
             fullWidth
             required
             name="concepts"
             label="Concepts"
+            size="small"
             sx={{ height: 40 }}
             onChange={(event) => handleInputChange(event)}
           />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <TextField
             fullWidth
             required
             name="field"
             label="Field"
+            size="small"
             sx={{ height: 40 }}
             onChange={(event) => handleInputChange(event)}
           />
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={3}>
           <IdeationLevels setLevels={setLevels} />
         </Grid>
-        <Grid item xs={4}>
-          <Button
-            fullWidth
-            type="submit"
-            variant="outlined"
-            sx={{ height: 50 }}
-            onClick={(event) => handleSubmit(event)}
-          >
-            Generate
+        <Grid
+          item
+          xs={2}
+          display={"flex"}
+          alignContent={"left"}
+          justifyContent={"left"}
+        >
+          <Button fullWidth onClick={(event) => handleSubmit(event)}>
+            <i>Generate Knowledge</i>
           </Button>
+        </Grid>
+        <Grid
+          item
+          xs={1}
+          display={"flex"}
+          alignContent={"left"}
+          justifyContent={"left"}
+        >
+          {getGenerateStateComponent()}
         </Grid>
       </Grid>
     </Card>

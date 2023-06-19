@@ -8,16 +8,13 @@ import {
   Paper,
   Typography,
   Dialog,
-  Tooltip,
   AppBar,
   Toolbar,
   IconButton,
   Slide,
   TextField,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
-import CheckIcon from "@mui/icons-material/Check";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -50,6 +47,11 @@ export default function IssueDialog({ open, setOpen, tree }) {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const handleClearStudent = (event) => {
+    setStudentList([]);
+    setStudentListUpdate(false);
   };
 
   const handleIssueTree = (event) => {
@@ -132,35 +134,38 @@ export default function IssueDialog({ open, setOpen, tree }) {
               alignContent={"center"}
               justifyContent={"center"}
             >
-              <Button>
-                <Tooltip title="Add">
-                  <AddIcon
-                    onClick={(event) => {
-                      handleAddStudent(event);
-                    }}
-                  />
-                </Tooltip>
+              <Button
+                onClick={(event) => {
+                  handleAddStudent(event);
+                }}
+              >
+                <i>Add</i>
               </Button>
-              <Button>
-                <Tooltip title="Add">
-                  <CheckIcon
-                    onClick={(event) => {
-                      handleIssueTree(event);
-                    }}
-                  />
-                </Tooltip>
+              <Button
+                onClick={(event) => {
+                  handleClearStudent(event);
+                }}
+              >
+                <i>Clear</i>
+              </Button>
+              <Button
+                onClick={(event) => {
+                  handleIssueTree(event);
+                }}
+              >
+                <i>Issue</i>
               </Button>
             </Grid>
             {studentList.map((student) => {
               return (
-                <Grid item xs={4}>
+                <Grid item xs={3}>
                   <Card
                     fullWidth
                     sx={{
                       p: 2,
                     }}
                   >
-                    <Typography variant="h5"> {student}</Typography>
+                    <Typography> {student}</Typography>
                   </Card>
                 </Grid>
               );

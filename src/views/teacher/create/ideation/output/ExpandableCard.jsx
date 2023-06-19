@@ -36,6 +36,8 @@ export default function ExpandableCard({
   index,
   selectedKnowledge,
   setSelectedKnowledge,
+  nextDisabled,
+  setNextDisabled,
 }) {
   const [expanded, setExpanded] = useState(false);
   const handleCheckBoxChange = (event) => {
@@ -50,6 +52,7 @@ export default function ExpandableCard({
       }
     }
     setSelectedKnowledge(newSelectedKnowledge);
+    setNextDisabled(newSelectedKnowledge.length <= 0);
   };
 
   const handleExpandClick = () => {
@@ -91,6 +94,7 @@ export default function ExpandableCard({
           onChange={handleCheckBoxChange}
           sx={{ color: palette.primary.main }}
         />
+        <Typography color={"text.secondary"}>Select</Typography>
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}

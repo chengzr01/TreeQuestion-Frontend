@@ -13,6 +13,8 @@ export default function IdeationLevels({ setLevels }) {
         setLevels(newValue);
       }}
       options={levels}
+      size="small"
+      sx={{ height: 40 }}
       renderInput={(params) => <TextField {...params} label="Levels" />}
     />
   );

@@ -22,7 +22,7 @@ export default function HeuristicsSelector({
       defaultValue={[]}
       filterSelectedOptions
       renderInput={(params) => {
-        return <TextField {...params} label="Heuristics" />;
+        return <TextField multiline {...params} label="Heuristics" />;
       }}
     />
   );

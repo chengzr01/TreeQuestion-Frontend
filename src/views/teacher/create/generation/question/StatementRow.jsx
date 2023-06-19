@@ -10,13 +10,15 @@ import {
   TableRow,
   IconButton,
   Typography,
-  Tooltip,
+  CircularProgress,
   Button,
   alpha,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import PublishedWithChangesOutlinedIcon from "@mui/icons-material/PublishedWithChangesOutlined";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 
 import StatementCard from "./StatementCard";
 import HeuristicsSelector from "./HeuristicsSelector";
@@ -37,6 +39,8 @@ export default function StatementRow({
   const [keyStatement, setKeyStatement] = useState("");
   const [distractorStatements, setDistractorStatements] = useState([]);
   const [heuristicValueList, setHeuristicValueList] = useState([]);
+  const [keyState, setKeyState] = useState("");
+  const [distractorState, setDistractorState] = useState("");
 
   const getDistractingStatment = (event) => {
     for (var index in heuristicValueList) {
@@ -47,11 +51,12 @@ export default function StatementRow({
         template: heuristicValueList[index].content,
         cache: cookie.load("cache"),
       };
+      setDistractorState("waiting");
       axios
         .post("/tree/create_distractor_statement", body)
         .then((res) => {
-          console.log(res.data.data);
-          var newStatementList = distractorStatements;
+          setDistractorState("success");
+          var newStatementList = [];
           res.data.data.distractors.forEach((element) => {
             newStatementList.push(element);
           });
@@ -59,7 +64,7 @@ export default function StatementRow({
           setDistractorUpdate(false);
         })
         .catch((err) => {
-          console.log(err);
+          setDistractorState("failure");
         });
     }
     return;
@@ -72,16 +77,53 @@ export default function StatementRow({
       label: row.label,
       cache: cookie.load("cache"),
     };
+    setKeyState("waiting");
     axios
       .post("/tree/create_key_statement", body)
       .then((res) => {
-        console.log(res.data.data);
+        setKeyState("success");
         setKeyStatement(res.data.data.key);
         setKeyUpdate(false);
       })
       .catch((err) => {
-        console.log(err);
+        setKeyState("failure");
       });
+  };
+
+  const getKeyGenerateStateComponent = () => {
+    if (keyState === "waiting") return <CircularProgress size="2vw" />;
+    else if (keyState === "success")
+      return (
+        <CheckCircleOutlineIcon
+          sx={{ fontSize: "2vw", color: "primary.main" }}
+        />
+      );
+    else if (keyState === "failure")
+      return <ErrorOutlineIcon sx={{ fontSize: "2vw", color: "error.main" }} />;
+    else
+      return (
+        <RadioButtonCheckedIcon
+          sx={{ fontSize: "2vw", color: "primary.main" }}
+        />
+      );
+  };
+
+  const getDistractorGenerateStateComponent = () => {
+    if (distractorState === "waiting") return <CircularProgress size="2vw" />;
+    else if (distractorState === "success")
+      return (
+        <CheckCircleOutlineIcon
+          sx={{ fontSize: "2vw", color: "primary.main" }}
+        />
+      );
+    else if (distractorState === "failure")
+      return <ErrorOutlineIcon sx={{ fontSize: "2vw", color: "error.main" }} />;
+    else
+      return (
+        <RadioButtonCheckedIcon
+          sx={{ fontSize: "2vw", color: "primary.main" }}
+        />
+      );
   };
 
   useEffect(() => {
@@ -120,30 +162,22 @@ export default function StatementRow({
             <Box sx={{ pt: 1, pb: 1 }}>
               <Grid container spacing={2}>
                 <Grid item xs={10}>
-                  <Typography
-                    sx={{ fontSize: 14, pt: 1 }}
-                    color="text.secondary"
-                    gutterBottom
+                  <Button
+                    onClick={(event) => {
+                      getKeyStatement(event);
+                    }}
                   >
-                    <i>Import as Keys</i>
-                  </Typography>
+                    <i>Generate Key</i>
+                  </Button>
                 </Grid>
                 <Grid
                   item
                   xs={2}
-                  display="flex"
-                  justifyContent="right"
-                  alignContent="right"
+                  display={"flex"}
+                  alignContent={"right"}
+                  justifyContent={"right"}
                 >
-                  <Tooltip title="Generate">
-                    <Button
-                      onClick={(event) => {
-                        getKeyStatement(event);
-                      }}
-                    >
-                      <PublishedWithChangesOutlinedIcon sx={{ m: 1 }} />
-                    </Button>
-                  </Tooltip>
+                  {getKeyGenerateStateComponent()}
                 </Grid>
                 <Grid item xs={12}>
                   {keyStatement === "" ? null : (
@@ -160,38 +194,25 @@ export default function StatementRow({
                   )}
                 </Grid>
                 <Grid item xs={10}>
-                  <Typography
-                    sx={{ fontSize: 14, pt: 1 }}
-                    color="text.secondary"
-                    gutterBottom
+                  <Button
+                    onClick={(event) => {
+                      getDistractingStatment(event);
+                    }}
                   >
-                    <i>Import as Distractors</i>
-                  </Typography>
+                    <i> Generate Distractors </i>
+                  </Button>
                 </Grid>
                 <Grid
                   item
                   xs={2}
-                  display="flex"
-                  justifyContent="right"
-                  alignContent="right"
+                  display={"flex"}
+                  alignContent={"right"}
+                  justifyContent={"right"}
                 >
-                  <Tooltip title="Generate">
-                    <Button
-                      onClick={(event) => {
-                        getDistractingStatment(event);
-                      }}
-                    >
-                      <PublishedWithChangesOutlinedIcon sx={{ m: 1 }} />
-                    </Button>
-                  </Tooltip>
+                  {getDistractorGenerateStateComponent()}
                 </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  display="flex"
-                  justifyContent="center"
-                  alignContent="center"
-                >
+
+                <Grid item xs={12}>
                   <HeuristicsSelector
                     heuristicValue={heuristicValueList}
                     setHeuristicValue={setHeuristicValueList}

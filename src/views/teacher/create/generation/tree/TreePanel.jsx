@@ -105,57 +105,55 @@ export default function TreePanel({ tree, setTree, update, setUpdate }) {
   });
 
   return (
-    <Card sx={{ width: "100%", height: "80vh", m: 4, p: 4 }}>
-      <div style={{ p: 1, width: "100%", height: "100%" }}>
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          nodeTypes={nodeTypes}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onConnect={onConnect}
-          fitView
-        >
-          <Controls />
-          <Background variant="dots" gap={12} size={1} />
-          <Panel position="top-left">
-            <Grid container spacing={2} sx={{ p: 1 }}>
-              <Grid
-                item
-                xs={12}
-                display="flex"
-                alignContent="left"
-                justifyContent="left"
-              >
-                <Tooltip title="Auto Layout">
-                  <AccountTreeIcon
-                    fontSize="small"
-                    sx={{ color: "text.secondary" }}
-                    onMouseEnter={() => {}}
-                    onMouseLeave={() => {}}
-                    onClick={() => onLayout("TB")}
-                  />
-                </Tooltip>
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                display="flex"
-                alignContent="left"
-                justifyContent="left"
-              >
-                <Tooltip title="Save">
-                  <SaveIcon
-                    fontSize="small"
-                    sx={{ color: "text.secondary" }}
-                    onClick={() => onSave()}
-                  />
-                </Tooltip>
-              </Grid>
+    <div style={{ width: "100%", height: "100%" }}>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        nodeTypes={nodeTypes}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        fitView
+      >
+        <Controls />
+        <Background variant="dots" gap={12} size={1} />
+        <Panel position="top-left">
+          <Grid container spacing={2} sx={{ p: 1 }}>
+            <Grid
+              item
+              xs={12}
+              display="flex"
+              alignContent="left"
+              justifyContent="left"
+            >
+              <Tooltip title="Auto Layout">
+                <AccountTreeIcon
+                  fontSize="small"
+                  sx={{ color: "text.secondary" }}
+                  onMouseEnter={() => {}}
+                  onMouseLeave={() => {}}
+                  onClick={() => onLayout("TB")}
+                />
+              </Tooltip>
             </Grid>
-          </Panel>
-        </ReactFlow>
-      </div>
-    </Card>
+            <Grid
+              item
+              xs={12}
+              display="flex"
+              alignContent="left"
+              justifyContent="left"
+            >
+              <Tooltip title="Save">
+                <SaveIcon
+                  fontSize="small"
+                  sx={{ color: "text.secondary" }}
+                  onClick={() => onSave()}
+                />
+              </Tooltip>
+            </Grid>
+          </Grid>
+        </Panel>
+      </ReactFlow>
+    </div>
   );
 }

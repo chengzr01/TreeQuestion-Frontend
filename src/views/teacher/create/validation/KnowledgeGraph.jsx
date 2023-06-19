@@ -16,7 +16,7 @@ import "reactflow/dist/style.css";
 
 import dagre from "dagre";
 
-import { Grid, Tooltip } from "@mui/material";
+import { Grid, Tooltip, Typography } from "@mui/material";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import SaveIcon from "@mui/icons-material/Save";
 
@@ -55,13 +55,19 @@ const getLayoutedElements = (nodes, edges, direction = "RL") => {
 const nodeTypes = { editable: EditableNode };
 const edgeTypes = { editable: EditableEdge };
 
-function AddNodeOnEdgeDrop({ graph, setGraph, sourceGraph, setSourceGraph }) {
+function AddNodeOnEdgeDrop({
+  graph,
+  setGraph,
+  sourceGraph,
+  setSourceGraph,
+  graphUpdate,
+  setGraphUpdate,
+}) {
   const { project } = useReactFlow();
   const reactFlowWrapper = useRef(null);
   const connectingNodeId = useRef(null);
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
-  const [graphLoad, setGraphLoad] = useState(false);
 
   const updateNode = (id, name) => {
     setNodes((nds) =>
@@ -92,7 +98,6 @@ function AddNodeOnEdgeDrop({ graph, setGraph, sourceGraph, setSourceGraph }) {
   };
 
   const getGraphState = () => {
-    setGraphLoad(true);
     var newNodesSet = [];
     var newEdgesSet = [];
     for (var edgeIndex in sourceGraph) {
@@ -252,13 +257,14 @@ function AddNodeOnEdgeDrop({ graph, setGraph, sourceGraph, setSourceGraph }) {
   );
 
   useEffect(() => {
-    if (!graphLoad) {
+    if (!graphUpdate) {
+      setGraphUpdate(true);
       getGraphState();
     }
   });
 
   return (
-    <div style={{ width: "100%", height: "100%" }} ref={reactFlowWrapper}>
+    <div style={{ width: "56vw", height: "56vh" }} ref={reactFlowWrapper}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -321,6 +327,8 @@ export default function KnowledgeGraph({
   setGraph,
   sourceGraph,
   setSourceGraph,
+  graphUpdate,
+  setGraphUpdate,
 }) {
   return (
     <ReactFlowProvider>
@@ -329,6 +337,8 @@ export default function KnowledgeGraph({
         setGraph={setGraph}
         sourceGraph={sourceGraph}
         setSourceGraph={setSourceGraph}
+        graphUpdate={graphUpdate}
+        setGraphUpdate={setGraphUpdate}
       />
     </ReactFlowProvider>
   );

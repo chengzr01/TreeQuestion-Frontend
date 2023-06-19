@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 
 import {
-  Card,
+  Box,
   Paper,
   Table,
   TableBody,
@@ -26,7 +26,7 @@ export default function StatementTable({
   setCandidateUpdate,
 }) {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(1);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -38,7 +38,7 @@ export default function StatementTable({
   };
 
   return (
-    <Card sx={{ m: 4, p: 4, width: "100%" }}>
+    <Box>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -85,7 +85,7 @@ export default function StatementTable({
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[1, 5, 10]}
         component="div"
         count={graph.edges.length}
         rowsPerPage={rowsPerPage}
@@ -93,6 +93,6 @@ export default function StatementTable({
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-    </Card>
+    </Box>
   );
 }

@@ -2,20 +2,7 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import cookie from "react-cookies";
 import axios from "axios";
-import {
-  Card,
-  Box,
-  Grid,
-  Typography,
-  Slider,
-  Divider,
-  styled,
-  Button,
-  Tooltip,
-  Chip,
-} from "@mui/material";
-import UploadIcon from "@mui/icons-material/Upload";
-import EditableText from "../question/EditableText";
+import { Grid, Typography, Button, Stack, TextField } from "@mui/material";
 
 const levels = [
   "Remember",
@@ -26,14 +13,6 @@ const levels = [
   "Create",
 ];
 
-const Root = styled("div")(({ theme }) => ({
-  width: "100%",
-  ...theme.typography.body2,
-  "& > :not(style) + :not(style)": {
-    marginTop: theme.spacing(2),
-  },
-}));
-
 export default function StatePanel({
   tree,
   setTree,
@@ -42,11 +21,8 @@ export default function StatePanel({
   concepts,
   field,
 }) {
-  const [expectedWidth, setExpectedWidth] = useState(50);
-  const [expectedHeight, setExpectedHeight] = useState(50);
   const [suggestionList, setSuggestionList] = useState([]);
-  const [identifier, setIdentifier] = useState("Identifier");
-  const [identifierUpdate, setIdentifierUpdate] = useState(true);
+  const [identifier, setIdentifier] = useState("");
   const conceptWeights = concepts.map((cpt) => {
     return { concept: cpt, weight: 1 };
   });
@@ -435,136 +411,57 @@ export default function StatePanel({
   });
 
   return (
-    <Card sx={{ m: 4, p: 4, height: "80vh" }}>
-      {/* <Root>
-        <Divider sx={{ mt: 1, mb: 1 }}>
-          <Chip label="Expectations" />
-        </Divider>
-      </Root>
-      <Box sx={{ pt: 2, pb: 2 }}>
-        <Grid container spacing={2}>
-          <Grid
-            item
-            xs={2}
-            display="flex"
-            justifyContent="right"
-            alignContent="right"
+    <Grid container spacing={2}>
+      <Grid item xs={6}>
+        <Stack direction={"row"} spacing={2}>
+          <Typography
+            color="text.secondary"
+            gutterBottom
+            sx={{ pt: 1, pb: 1, fontSize: 14 }}
           >
-            Width
-          </Grid>
-          <Grid
-            item
-            xs={8}
-            display="flex"
-            justifyContent="center"
-            alignContent="center"
-          >
-            <Slider
-              aria-label="Volume"
-              size="small"
-              value={expectedWidth}
-              onChange={(event, newWidth) => {
-                setExpectedWidth(newWidth);
-              }}
-            />
-          </Grid>
-          <Grid
-            item
-            xs={2}
-            display="flex"
-            justifyContent="right"
-            alignContent="right"
-          >
-            {(expectedWidth / 50).toFixed(2)}
-          </Grid>
-          <Grid
-            item
-            xs={2}
-            display="flex"
-            justifyContent="right"
-            alignContent="right"
-          >
-            Height
-          </Grid>
-          <Grid
-            item
-            xs={8}
-            display="flex"
-            justifyContent="center"
-            alignContent="center"
-          >
-            <Slider
-              aria-label="Volume"
-              size="small"
-              value={expectedHeight}
-              onChange={(event, newHeight) => {
-                setExpectedHeight(newHeight);
-              }}
-            />
-          </Grid>
-          <Grid
-            item
-            xs={2}
-            display="flex"
-            justifyContent="right"
-            alignContent="right"
-          >
-            {(expectedHeight / 50).toFixed(2)}
-          </Grid>
-        </Grid>
-      </Box> */}
-      <Root>
-        <Divider sx={{ mt: 1, mb: 1 }}>
-          <Chip label="Suggestions" />
-        </Divider>
-      </Root>
-      <Box sx={{ pt: 2, pb: 2 }}>
-        {suggestionList.map((suggestion) => {
-          return (
-            <Card sx={{ m: 1, p: 1 }}>
-              <Typography variant="body">{suggestion}</Typography>
-            </Card>
-          );
-        })}
-      </Box>
-      <Root>
-        <Divider sx={{ mt: 1, mb: 1 }}>
-          <Chip label="Operations" />
-        </Divider>
-      </Root>
-      <Grid container spacing={2}>
-        <Grid
-          item
-          xs={10}
-          display={"flex"}
-          alignContent={"left"}
-          justifyContent={"left"}
-        >
-          <EditableText
-            defaultValue={identifier}
-            updateDefaultValue={setIdentifier}
-            update={identifierUpdate}
-            setUpdate={identifierUpdate}
-          ></EditableText>
-        </Grid>
-        <Grid
-          item
-          xs={2}
-          display={"flex"}
-          alignContent={"center"}
-          justifyContent={"center"}
-        >
-          <Tooltip title="Upload">
-            <Button
-              onClick={(event) => {
-                handleUpload(event);
-              }}
-            >
-              <UploadIcon />
-            </Button>
-          </Tooltip>
-        </Grid>
+            <i>Suggestion</i>
+          </Typography>
+          {suggestionList.map((suggestion) => {
+            return (
+              <Typography variant="body" sx={{ pt: 1, pb: 1, fontSize: 14 }}>
+                {suggestion.toUpperCase()}
+              </Typography>
+            );
+          })}
+        </Stack>
       </Grid>
-    </Card>
+      <Grid item xs={4}>
+        <Stack direction={"row"} spacing={2}>
+          <Typography
+            color="text.secondary"
+            gutterBottom
+            sx={{ pt: 1, pb: 1, fontSize: 14 }}
+          >
+            <i>Name</i>
+          </Typography>
+          <TextField
+            variant="outlined"
+            size="small"
+            value={identifier}
+            onChange={(event) => {
+              setIdentifier(event.target.value);
+            }}
+          />
+        </Stack>
+      </Grid>
+      <Grid item xs={2}>
+        <Stack direction={"row"}>
+          <Button
+            fullWidth
+            sx={{ pt: 1, pb: 1 }}
+            onClick={(event) => {
+              handleUpload(event);
+            }}
+          >
+            <i>Upload</i>
+          </Button>
+        </Stack>
+      </Grid>
+    </Grid>
   );
 }

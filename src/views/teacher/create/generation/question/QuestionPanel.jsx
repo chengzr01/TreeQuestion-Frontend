@@ -4,21 +4,22 @@ import axios from "axios";
 import cookie from "react-cookies";
 import {
   Button,
-  Card,
   Grid,
   Typography,
   TextField,
   Autocomplete,
-  Tooltip,
   Divider,
   styled,
   Chip,
   Menu,
   MenuItem,
+  Box,
+  CircularProgress,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import BackspaceIconOutlined from "@mui/icons-material/BackspaceOutlined";
-import PublishedWithChangesOutlinedIcon from "@mui/icons-material/PublishedWithChangesOutlined";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
 import EditableText from "./EditableText";
 import EditableOptions from "./EditableOptions";
@@ -59,22 +60,29 @@ export default function QuestionPanel({
   const [questionOptionsUpdate, setQuestionOptionsUpdate] = useState(true);
   const [questionAnswer, setQuestionAnswer] = useState("");
   const [questionAnswerUpdate, setQuestionAnswerUpdate] = useState(true);
-
+  const [questionGenerateState, setQuestionGenerateState] = useState("");
   const [keyAnchorEl, setKeyAnchorEl] = useState(null);
   const [activeKey, setActiveKey] = useState(null);
   const keyOpen = Boolean(keyAnchorEl);
+
   const handleKeyClick = (event) => {
     setKeyAnchorEl(event.currentTarget);
   };
+
   const handleKeyClose = (event) => {
     setKeyAnchorEl(null);
   };
+
   const handleKeyDelete = (event) => {
     var newKeyCandidates = keyCandidates;
     if (newKeyCandidates.indexOf(activeKey) >= 0) {
       newKeyCandidates.splice(keyCandidates.indexOf(activeKey), 1);
     }
     setKeyCandidates(newKeyCandidates);
+  };
+
+  const handleKeyClear = (event) => {
+    setKeyCandidates([]);
   };
 
   const [distractorAnchorEl, setDistractorAnchorEl] = useState(null);
@@ -97,6 +105,10 @@ export default function QuestionPanel({
     setDistractorCandidates(newDistractorCandidates);
   };
 
+  const handleDistractorClear = (event) => {
+    setDistractorCandidates([]);
+  };
+
   const getQuestion = (event) => {
     var maxID = 0;
     for (var index in tree.nodes) {
@@ -114,19 +126,20 @@ export default function QuestionPanel({
       distractors: distractorCandidates,
       cache: cookie.load("cache"),
     };
+    setQuestionGenerateState("waiting");
     axios
       .post("/tree/create_question", body)
       .then((res) => {
-        console.log(res.data.data);
         setQuestionStem(res.data.data.stem);
         setQuestionOptions(res.data.data.options);
         setQuestionAnswer(res.data.data.answer);
         setQuestionStemUpdate(false);
         setQuestionOptionsUpdate(false);
         setQuestionAnswerUpdate(false);
+        setQuestionGenerateState("suceess");
       })
       .catch((err) => {
-        console.log(err);
+        setQuestionGenerateState("false");
       });
   };
 
@@ -164,6 +177,25 @@ export default function QuestionPanel({
     setQuestionAnswerUpdate(false);
   };
 
+  const getQuestionGenerateStateComponent = () => {
+    if (questionGenerateState === "waiting")
+      return <CircularProgress size="2vw" />;
+    else if (questionGenerateState === "success")
+      return (
+        <CheckCircleOutlineIcon
+          sx={{ fontSize: "2vw", color: "primary.main" }}
+        />
+      );
+    else if (questionGenerateState === "failure")
+      return <ErrorOutlineIcon sx={{ fontSize: "2vw", color: "error.main" }} />;
+    else
+      return (
+        <RadioButtonCheckedIcon
+          sx={{ fontSize: "2vw", color: "primary.main" }}
+        />
+      );
+  };
+
   useEffect(() => {
     if (!candidateUpdate) {
       setCandidateUpdate(true);
@@ -171,20 +203,26 @@ export default function QuestionPanel({
   });
 
   return (
-    <Card sx={{ m: 4, p: 4 }}>
+    <Box>
       <Grid container spacing={2}>
-        <Root>
-          <Divider sx={{ mt: 1, mb: 1 }}>
-            <Chip label="Keys" />
-          </Divider>
-        </Root>
+        <Grid item xs={10}>
+          <Typography
+            sx={{ fontSize: 14, pt: 1, pb: 1 }}
+            color="text.secondary"
+          >
+            <i>Keys</i>
+          </Typography>
+        </Grid>
+        <Grid item xs={2}>
+          <Button fullWidth onClick={(event) => handleKeyClear(event)}>
+            <i>Clear</i>
+          </Button>
+        </Grid>
+
         {keyCandidates.map((key) => {
           return (
-            <div>
+            <Grid item xs={12}>
               <Typography
-                variant="body2"
-                color="text.secondary"
-                gutterBottom
                 onClick={(event) => {
                   setActiveKey(key);
                   handleKeyClick(event);
@@ -210,22 +248,28 @@ export default function QuestionPanel({
                   Delete
                 </MenuItem>
               </Menu>
-            </div>
+            </Grid>
           );
         })}
 
-        <Root>
-          <Divider sx={{ mt: 1, mb: 1 }}>
-            <Chip label="Distractors" />
-          </Divider>
-        </Root>
+        <Grid item xs={10}>
+          <Typography
+            sx={{ fontSize: 14, pt: 1, pb: 1 }}
+            color="text.secondary"
+          >
+            <i>Distractors</i>
+          </Typography>
+        </Grid>
+        <Grid item xs={2}>
+          <Button fullWidth onClick={(event) => handleDistractorClear(event)}>
+            <i>Clear</i>
+          </Button>
+        </Grid>
+
         {distractorCandidates.map((distractor) => {
           return (
-            <div>
+            <Grid item xs={12}>
               <Typography
-                variant="body2"
-                color="text.secondary"
-                gutterBottom
                 onClick={(event) => {
                   setActiveDistractor(distractor);
                   handleDistractorClick(event);
@@ -251,14 +295,9 @@ export default function QuestionPanel({
                   Delete
                 </MenuItem>
               </Menu>
-            </div>
+            </Grid>
           );
         })}
-        <Root>
-          <Divider sx={{ mt: 1, mb: 1 }}>
-            <Chip label="Questions" />
-          </Divider>
-        </Root>
         <Grid item xs={12}>
           <Autocomplete
             size="small"
@@ -302,6 +341,36 @@ export default function QuestionPanel({
             renderInput={(params) => <TextField {...params} label="Type" />}
           />
         </Grid>
+        <Grid item xs={5}>
+          <Button
+            fullWidth
+            onClick={(event) => {
+              getQuestion(event);
+            }}
+          >
+            <i>Generate Question</i>
+          </Button>
+        </Grid>
+        <Grid
+          item
+          xs={2}
+          display={"flex"}
+          justifyContent={"center"}
+          alignContent={"center"}
+        >
+          {getQuestionGenerateStateComponent()}
+        </Grid>
+        <Grid item xs={5}>
+          <Button
+            fullWidth
+            onClick={(event) => {
+              handleAdd(event);
+              handleClear(event);
+            }}
+          >
+            <i>Add to Tree</i>
+          </Button>
+        </Grid>
         <Grid item xs={2}>
           <Typography
             sx={{ fontSize: 14 }}
@@ -311,22 +380,7 @@ export default function QuestionPanel({
             justifyContent="right"
             alignContent="right"
           >
-            ID
-          </Typography>
-        </Grid>
-        <Grid item xs={10}>
-          {ID}
-        </Grid>
-        <Grid item xs={2}>
-          <Typography
-            sx={{ fontSize: 14 }}
-            color="text.secondary"
-            gutterBottom
-            display="flex"
-            justifyContent="right"
-            alignContent="right"
-          >
-            Stem
+            <i>Stem</i>
           </Typography>
         </Grid>
         <Grid item xs={10}>
@@ -346,7 +400,7 @@ export default function QuestionPanel({
             justifyContent="right"
             alignContent="right"
           >
-            Options
+            <i>Options</i>
           </Typography>
         </Grid>
         <Grid item xs={10}>
@@ -366,7 +420,7 @@ export default function QuestionPanel({
             justifyContent="right"
             alignContent="right"
           >
-            Answer
+            <i>Answer</i>
           </Typography>
         </Grid>
         <Grid item xs={10}>
@@ -377,42 +431,7 @@ export default function QuestionPanel({
             setUpdate={setQuestionAnswerUpdate}
           ></EditableText>
         </Grid>
-        <Grid
-          item
-          xs={12}
-          display="flex"
-          justifyContent="center"
-          alignContent="center"
-        >
-          <Tooltip title="Generate">
-            <Button
-              onClick={(event) => {
-                getQuestion(event);
-              }}
-            >
-              <PublishedWithChangesOutlinedIcon />
-            </Button>
-          </Tooltip>
-          <Tooltip title="Add">
-            <Button
-              onClick={(event) => {
-                handleAdd(event);
-              }}
-            >
-              <AddIcon />
-            </Button>
-          </Tooltip>
-          <Tooltip title="Clear">
-            <Button
-              onClick={(event) => {
-                handleClear(event);
-              }}
-            >
-              <BackspaceIconOutlined />
-            </Button>
-          </Tooltip>
-        </Grid>
       </Grid>
-    </Card>
+    </Box>
   );
 }
