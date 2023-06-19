@@ -16,9 +16,10 @@ import "reactflow/dist/style.css";
 
 import dagre from "dagre";
 
-import { Grid, Tooltip, Typography } from "@mui/material";
+import { Grid, Tooltip } from "@mui/material";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import SaveIcon from "@mui/icons-material/Save";
+import ClearAllIcon from "@mui/icons-material/ClearAll";
 
 import "./editable-node.css";
 import EditableEdge from "./EditableEdge";
@@ -68,6 +69,7 @@ function AddNodeOnEdgeDrop({
   const connectingNodeId = useRef(null);
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
+  const [graphInitialized, setGraphInitialized] = useState(false);
 
   const updateNode = (id, name) => {
     setNodes((nds) =>
@@ -105,6 +107,8 @@ function AddNodeOnEdgeDrop({
         from: sourceGraph[edgeIndex].source,
         to: sourceGraph[edgeIndex].target,
         label: sourceGraph[edgeIndex].relation,
+        concept: sourceGraph[edgeIndex].concept,
+        field: sourceGraph[edgeIndex].field,
       });
       newNodesSet.push(sourceGraph[edgeIndex].source);
       newNodesSet.push(sourceGraph[edgeIndex].target);
@@ -171,6 +175,11 @@ function AddNodeOnEdgeDrop({
     },
     [nodes, edges]
   );
+
+  const onClear = () => {
+    setSourceGraph([]);
+    setGraphUpdate(false);
+  };
 
   const onNodesChange = useCallback(
     (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -261,6 +270,10 @@ function AddNodeOnEdgeDrop({
       setGraphUpdate(true);
       getGraphState();
     }
+    if (!graphInitialized) {
+      setGraphInitialized(true);
+      getGraphState();
+    }
   });
 
   return (
@@ -311,6 +324,21 @@ function AddNodeOnEdgeDrop({
                   fontSize="small"
                   sx={{ color: "text.secondary" }}
                   onClick={() => onSave()}
+                />
+              </Tooltip>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              display="flex"
+              alignContent="left"
+              justifyContent="left"
+            >
+              <Tooltip title="Clear">
+                <ClearAllIcon
+                  fontSize="small"
+                  sx={{ color: "text.secondary" }}
+                  onClick={() => onClear()}
                 />
               </Tooltip>
             </Grid>

@@ -43,14 +43,20 @@ export default function ValidationIndex({
           alignContent={"center"}
         >
           <Card sx={{ mt: 4, mb: 4, ml: 4, p: 4, width: "100%" }}>
-            <Typography sx={{ height: "4vh" }} align="center">
-              <b>
-                <i>Source Text</i>
-              </b>
-            </Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Typography sx={{ height: "4vh" }} align="center">
+                  <b>
+                    <i>Source Text</i>
+                  </b>
+                </Typography>
+              </Grid>
+            </Grid>
+
             <ValidationText
               concepts={concepts}
               field={field}
+              sourceGraph={sourceGraph}
               setSourceGraph={setSourceGraph}
               sourceText={sourceText}
               graphUpdate={graphUpdate}

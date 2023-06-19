@@ -22,6 +22,7 @@ export default function ValidationText({
   concepts,
   field,
   sourceText,
+  sourceGraph,
   setSourceGraph,
   graphUpdate,
   setGraphUpdate,
@@ -40,7 +41,11 @@ export default function ValidationText({
     axios
       .post("/tree/create_knowledge_graph", body)
       .then((res) => {
-        setSourceGraph(res.data.data.graph);
+        var newSourceGraph = sourceGraph;
+        for (var index in res.data.data.graph) {
+          newSourceGraph.push(res.data.data.graph[index]);
+        }
+        setSourceGraph(newSourceGraph);
         setGraphUpdate(false);
         setGenerateState("success");
       })
