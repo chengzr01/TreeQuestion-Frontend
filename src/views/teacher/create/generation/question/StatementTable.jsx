@@ -26,7 +26,7 @@ export default function StatementTable({
   setCandidateUpdate,
 }) {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -63,10 +63,19 @@ export default function StatementTable({
                 )
               : graph.edges
             ).map((edge) => {
+              console.log(
+                edge,
+                graph.nodes[parseInt(edge.source)],
+                graph.nodes[parseInt(edge.target)]
+              );
               var row = {
-                source: graph.nodes[parseInt(edge.source)].data.label,
-                label: edge.data.label,
-                target: graph.nodes[parseInt(edge.target)].data.label,
+                source: graph.nodes[parseInt(edge.source)]
+                  ? graph.nodes[parseInt(edge.source)].data.label
+                  : " ",
+                label: edge ? edge.data.label : " ",
+                target: graph.nodes[parseInt(edge.target)]
+                  ? graph.nodes[parseInt(edge.target)].data.label
+                  : " ",
               };
               return (
                 <StatementRow
