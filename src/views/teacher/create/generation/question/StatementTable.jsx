@@ -26,7 +26,7 @@ export default function StatementTable({
   setCandidateUpdate,
 }) {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(4);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);

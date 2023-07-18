@@ -368,7 +368,7 @@ export default function QuestionPanel({
               handleClear(event);
             }}
           >
-            <i>Add to Tree</i>
+            <i>Save Question</i>
           </Button>
         </Grid>
         <Grid item xs={2}>
